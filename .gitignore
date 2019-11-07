@@ -1,0 +1,28 @@
+# Created by https://www.gitignore.io/api/laravel
+
+### Laravel ###
+vendor/
+node_modules/
+npm-debug.log
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
+storage/*.key
+.env.*.php
+.env.php
+.env
+.env.testing
+Homestead.yaml
+Homestead.json
+laravel-echo-server.json
+laravel-echo-server.lock
+
+# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
+.rocketeer/
+
+.DS_Store
