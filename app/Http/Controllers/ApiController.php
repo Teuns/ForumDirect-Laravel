@@ -2,7 +2,7 @@
 
 /**
  * ApiController
- * 
+ *
  * @category Api
  *
  * @package App\Http\Controllers
@@ -15,18 +15,18 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
+use App\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Auth;
-
 use App\User;
 
 /**
  * Handles all the Api functionality in the system
- * 
+ *
  * @category Api
  *
  * @package App\Http\Controllers
@@ -41,9 +41,9 @@ class ApiController extends Controller
 {
     /**
      * Gets the username of a username correctly
-     * 
+     *
      * @param string $username username
-     * 
+     *
      * @return response
      */
     public function getUserNameCorrectly($username)
@@ -56,9 +56,9 @@ class ApiController extends Controller
 
     /**
      * Gets the role by username
-     * 
+     *
      * @param string $username username
-     * 
+     *
      * @return response
      */
     public function getUserRoleByName($username)
@@ -66,9 +66,11 @@ class ApiController extends Controller
         $user = DB::table('users')->where('name', $username)->get();
 
         $query = User::with(
-            ['roles' => function ($q) use ($user) {
+            [
+            'roles' => function ($q) use ($user) {
                 $q->where('role_id', '=', $user[0]->primary_role);
-            }]
+            },
+            ]
         )
         ->where('id', $user[0]->id)
         ->get();
@@ -76,12 +78,12 @@ class ApiController extends Controller
         return response($query[0]->roles[0]->name, 200)
                 ->header('Content-Type', 'text/plain');
     }
-    
+
     /**
      * Gets the UserId by the username
-     * 
+     *
      * @param string $username username
-     * 
+     *
      * @return response
      */
     public function getUserIdByName($username)
@@ -91,10 +93,10 @@ class ApiController extends Controller
            return response($query[0]->id, 200)
                   ->header('Content-Type', 'text/plain');
     }
-    
+
     /**
      * Gets the UserId of the user that is logged in
-     * 
+     *
      * @return response
      */
     public function getUserId()
@@ -102,12 +104,12 @@ class ApiController extends Controller
            return response(Auth::user()->id, 200)
                   ->header('Content-Type', 'text/plain');
     }
-    
+
     /**
      * Reports a thread or post
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return response
      */
     public function report(Request $request)
@@ -123,12 +125,12 @@ class ApiController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * Likes a post or thread
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return response
      */
     public function like(Request $request)
@@ -138,7 +140,7 @@ class ApiController extends Controller
         $data = $request->only('pid', 'tid');
 
         $data['user_id'] = Auth::user()->id;
-        
+
         if ($request->pid && !self::CheckIfUserVotedPost($request->pid) && !self::checkIfUserIsPostOwner($request->pid)) {
             $post = DB::table('posts')->where('id', $request->pid);
             if ($votes->insert($data) && $post->update(['votes' => DB::raw('votes+1')])) {
@@ -155,15 +157,15 @@ class ApiController extends Controller
             }
         }
     }
-    
+
     /**
      * Gets the recent posts
-     * 
+     *
      * @return view
      */
     public function getRecentPosts()
     {
-        $last_threads = DB::table('threads')
+        $last_threads = Thread::select()
             ->orderBy('threads.lastpost_date', 'desc')
             ->limit(10)
             ->where('published', '=', 1)
@@ -172,12 +174,12 @@ class ApiController extends Controller
 
         return view('api/recent', ['last_threads' => $last_threads]);
     }
-    
+
     /**
      *  Checks if user is the owner of the given thread
-     * 
+     *
      * @param integer $tid threadId
-     * 
+     *
      * @return boolean
      */
     public function checkIfUserIsThreadOwner($tid)
@@ -191,12 +193,12 @@ class ApiController extends Controller
             return false;
         }
     }
-    
+
     /**
      * Checks if user is the owner of the given post
-     * 
+     *
      * @param integer $pid postId
-     * 
+     *
      * @return boolean
      */
     public function checkIfUserIsPostOwner($pid)
@@ -210,10 +212,10 @@ class ApiController extends Controller
             return false;
         }
     }
-    
+
     /**
      * Checks if user votes thread
-     * 
+     *
      * @param integer $tid threadId
      *
      * @return boolean
@@ -232,9 +234,9 @@ class ApiController extends Controller
 
     /**
      * Checks if user voted post
-     * 
+     *
      * @param integer $pid postId
-     * 
+     *
      * @return boolean
      */
     public function checkIfUserVotedPost($pid)
@@ -248,5 +250,4 @@ class ApiController extends Controller
             return false;
         }
     }
-
 }

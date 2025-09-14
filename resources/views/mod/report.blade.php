@@ -4,7 +4,11 @@
 
 @section('content')
 
-<?php use \App\Http\Controllers\ModController; ?>
+<?php
+
+use App\Http\Controllers\ModController;
+
+?>
 <div class="container my-3">
     <div class="row">
         <div class="col-md-3 mb-3">

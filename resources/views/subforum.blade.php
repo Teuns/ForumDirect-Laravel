@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\IndexController; ?>
+<?php
+
+use App\Http\Controllers\IndexController;
+
+?>
 
 @extends('layouts.app')
 
@@ -31,7 +35,7 @@
                             <i class="mdi mdi-36px mdi-comment mdi-is-medium list-item-prefix"></i>
                             <div class="list-item-caption">
                             <a href="/threads/show/{{ $row->id }}-{{ $row->slug }}">{{ $row->title }}</a>
-                            <span class="text-soft"><div>by <a href="/users/{{ IndexController::GetUserName($row->user_id) }}" class="{{ IndexController::GetUserRoleName($row->user_id) }}">{{ IndexController::getUserName($row->user_id) }}</a></div><div>{{ $row->created_at }}</div></span>
+                            <span class="text-soft"><div>by <a href="/users/{{ $row->user->name }}" class="{{ $row->user->role->name }}">{{ $row->user->name }}</a></div><div>{{ $row->created_at }}</div></span>
                         </div>
                         <div class="list-item-caption list-item-suffix">
                             {!! IndexController::getLastPostByThread($row->id) !!}
@@ -56,7 +60,7 @@
                                         <div id="recent">
                                             <div class="list mb-0">
                                                 @foreach ($last_threads as $row)
-                                                <div class="list-item"><div class="list-item-caption"><a href="/threads/show/{{ $row->id }}-{{ $row->slug }}?action=lastpost">{{ str_limit($row->title, 50) }}</a><br><small>by <a href="/users/{{ IndexController::GetUserName($row->lastpost_uid) }}" class="{{ IndexController::getUserRoleName($row->lastpost_uid) }}">{{ IndexController::getUserName($row->lastpost_uid) }}</a> <span>created at {{ Carbon\Carbon::parse($row->lastpost_date)->diffForHumans() }}</span></small>
+                                                <div class="list-item"><div class="list-item-caption"><a href="/threads/show/{{ $row->id }}-{{ $row->slug }}?action=lastpost">{{ \Illuminate\Support\Str::limit($row->title, 50) }}</a><br><small>by <a href="/users/{{ $row->lastUser->name }}" class="{{ $row->lastUser->role->name }}">{{ $row->lastUser->name }}</a> <span>created at {{ Carbon\Carbon::parse($row->lastpost_date)->diffForHumans() }}</span></small>
                                                 </div></div>
                                                 @endforeach
                                                 @if($last_threads->isEmpty())
@@ -75,11 +79,13 @@
                                             <?php $resultstr = array(); ?>
                                             @foreach($users as $item)
                                                 @if($item->user_timestamp >= (new \Carbon\Carbon())->subMinutes(15))
-                                                    <div class="list-item"><div class="list-item-caption"><strong><a href='/users/{{ $item->name }}' class='{{ IndexController::getUserRoleName($item->id) }}'>{{ $item->name }}</a></strong></div></div>
-                                                    <?php $resultstr[] = "<li><a href='/users/".$item->name."'>".$item->name."</a></li>"; ?>
+                                                    <div class="list-item"><div class="list-item-caption"><strong><a href='/users/{{ $item->name }}' class='{{ $item->role->name  }}'>{{ $item->name }}</a></strong></div></div>
+                                                    <?php $resultstr[] = "<li><a href='/users/" . $item->name . "'>" . $item->name . "</a></li>"; ?>
                                                 @endif
                                             @endforeach
-                                            <?php if(!$resultstr){ echo "-"; } ?>
+                                            <?php if (!$resultstr) {
+                                                echo "-";
+                                            } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +116,11 @@
                                     <div class="panel-footer">
                                         <div>Newest user:&nbsp;</div>
                                         @if(!$users->isEmpty())
-                                            <div><a href="/users/{{ $users[0]->name }}" class='<?php echo IndexController::getUserRoleName($users[0]->id); ?>'><?php if(!empty($users[0])){ echo $users[0]->name; }else{ echo '-'; } ?></a></div>
+                                            <div><a href="/users/{{ $users[0]->name }}" class='<?php echo $users[0]->role->name; ?>'><?php if (!empty($users[0])) {
+                                                echo $users[0]->name;
+                                                                                               } else {
+                                                                                                   echo '-';
+                                                                                               } ?></a></div>
                                         @else
                                             <div><p>-</p></div>
                                         @endif
@@ -122,7 +132,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 @endsection

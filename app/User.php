@@ -18,19 +18,28 @@ class User extends Authenticatable implements MustVerifyEmail
         'password', 'remember_token', 'email',
     ];
 
+    public function threads() {
+        return $this->hasMany(Thread::class);
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_users');
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'primary_role');
+    }
+
     /**
      * Checks if User has access to $permissions.
      */
-    public function hasAccess(array $permissions) : bool
+    public function hasAccess(array $permissions): bool
     {
         // check if the permission is available in any role
         foreach ($this->roles as $role) {
-            if($role->hasAccess($permissions)) {
+            if ($role->hasAccess($permissions)) {
                 return true;
             }
         }

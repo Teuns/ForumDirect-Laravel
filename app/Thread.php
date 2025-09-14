@@ -15,6 +15,16 @@ class Thread extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function lastUser()
+    {
+        return $this->belongsTo(User::class, 'lastpost_uid');
+    }
+
     public function scopePublished($query)
     {
         return $query->where('published', true);

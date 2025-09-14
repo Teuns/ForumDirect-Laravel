@@ -2,7 +2,7 @@
 
 /**
  * SubforumsController
- * 
+ *
  * @category Subforum
  *
  * @package App\Http\Controllers
@@ -15,19 +15,20 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
+use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Auth;
-
 use App\Subforums;
 use App\Role;
 
 /**
  * Handles all the Subforum functionality in the system
- * 
+ *
  * @category Category
  *
  * @package App\Http\Controllers
@@ -42,10 +43,10 @@ class SubforumsController extends Controller
 {
     /**
      * The show function of the SubforumsController
-     * 
+     *
      * @param integer $id   id
      * @param string  $slug slug
-     * 
+     *
      * @return view
      */
     public function show($id, $slug)
@@ -80,7 +81,7 @@ class SubforumsController extends Controller
                         $user->save();
                         $user->roles()->detach($member_Role);
                     }
-                }     
+                }
             } elseif ($count_warnings && $user->primary_role == $role->id) {
                 $member_Role = Role::where('name', '=', 'Member')->first();
                 $role = Role::where('name', '=', 'Banned')->first();
@@ -94,13 +95,13 @@ class SubforumsController extends Controller
 
         $subforum = Subforums::where('id', '=', $id)->where('slug', '=', $slug)->firstOrFail();
 
-        $threads = DB::table('threads')->where('subforum_id', '=', $id)->orderBy('lastpost_date', 'desc')->get();
+        $threads = Thread::select()->where('subforum_id', '=', $id)->orderBy('lastpost_date', 'desc')->get();
 
-        $users = DB::table('users')
+        $users = User::select()
             ->orderBy('id', 'desc')
             ->get();
 
-        $last_threads = DB::table('threads')
+        $last_threads = Thread::select()
             ->orderBy('threads.lastpost_date', 'desc')
             ->limit(10)
             ->where('published', '=', 1)
@@ -114,5 +115,4 @@ class SubforumsController extends Controller
 
         return view('subforum', ['subforum' => $subforum, 'threads' => $threads, 'users' => $users, 'count_users' => $count_users, 'count_posts' => $count_posts, 'count_topics' => $count_topics, 'last_threads' => $last_threads]);
     }
-
 }

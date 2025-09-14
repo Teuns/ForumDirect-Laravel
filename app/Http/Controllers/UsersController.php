@@ -2,7 +2,7 @@
 
 /**
  * UsersController
- * 
+ *
  * @category User
  *
  * @package App\Http\Controllers
@@ -15,18 +15,17 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Auth;
-
 use App\User;
 
 /**
  * Handles all the Users functionality in the system
- * 
+ *
  * @category Mod
  *
  * @package App\Http\Controllers
@@ -51,7 +50,7 @@ class UsersController extends Controller
 
     /**
      * The index page of the Users CP
-     * 
+     *
      * @return view
      */
     public function index()
@@ -65,14 +64,13 @@ class UsersController extends Controller
         $count_threads = DB::table('threads')->where('user_id', '=', $user->id)->count();
 
         return view('users/index', ['user' => $user, 'count_posts' => $count_posts, 'count_threads' => $count_threads, 'threads' => $threads]);
-
     }
-    
+
     /**
      * The editAccount page of the Users CP
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function editAccount(Request $request)
@@ -80,9 +78,11 @@ class UsersController extends Controller
         $users = User::where('id', '=', Auth::user()->id)->firstOrFail();
 
         $roles = User::with(
-            ['roles' => function ($q) {
+            [
+            'roles' => function ($q) {
                 $q->where('user_id', '=', Auth::user()->id);
-            }]
+            },
+            ]
         )
         ->where('id', Auth::user()->id)
         ->get();
@@ -95,7 +95,7 @@ class UsersController extends Controller
             if ($data['password']) {
                 $request->validate(
                     [
-                    'email' => '|required|min:10|'
+                    'email' => '|required|min:10|',
                     ]
                 );
                 $data['password'] = bcrypt($data['password']);
@@ -105,9 +105,11 @@ class UsersController extends Controller
 
             if ($data['primary_role']) {
                 $query = User::with(
-                    ['roles' => function ($q) use ($data) {
+                    [
+                    'roles' => function ($q) use ($data) {
                         $q->where('role_id', '=', $data['primary_role']);
-                    }]
+                    },
+                    ]
                 )
                 ->where('id', Auth::user()->id)->get();
 
@@ -121,31 +123,32 @@ class UsersController extends Controller
 
         return view('users/edit-account', ['roles' => $roles]);
     }
-     
+
     /**
      * The uploadAvatar page of the Users CP
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
-    public function uploadAvatar(Request $request) 
+    public function uploadAvatar(Request $request)
     {
         if ($request->isMethod('post')) {
             $this->validate(
-                $request, [
+                $request,
+                [
                 'input_img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 ]
             );
 
             $image = $request->file('input_img');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/images');
             $image->move($destinationPath, $name);
 
             $query = DB::table('users')
                 ->where('id', Auth::user()->id)
-                ->update(['user_avatar' => '/images/'.$name]);
+                ->update(['user_avatar' => '/images/' . $name]);
 
                return back()->with('success', 'Image Upload successfully');
         }
@@ -154,12 +157,12 @@ class UsersController extends Controller
 
         return view('users/upload-avatar', ['user' => $user]);
     }
-    
+
     /**
      * The profile page of the Users CP
-     * 
+     *
      * @param integer $userName userName
-     * 
+     *
      * @return view
      */
     public function profile($userName)
@@ -172,12 +175,12 @@ class UsersController extends Controller
 
         return view('users/profile', ['user' => $user, 'count_posts' => $count_posts, 'count_threads' => $count_threads]);
     }
-    
+
     /**
      * The getUserRoleName function of the Users CP
-     * 
+     *
      * @param integer $userId userId
-     * 
+     *
      * @return view
      */
     static function getUserRoleName($userId)
@@ -185,14 +188,15 @@ class UsersController extends Controller
         $user = User::where('id', $userId)->get();
 
         $query = User::with(
-            ['roles' => function ($q) use ($user) {
+            [
+            'roles' => function ($q) use ($user) {
                 $q->where('role_id', '=', $user[0]->primary_role);
-            }]
+            },
+            ]
         )
         ->where('id', $userId)
         ->get();
 
         return $query[0]->roles[0]->name;
     }
-    
 }

@@ -15,14 +15,14 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
+use App\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use \App\Http\Controllers\ThreadController;
-
+use App\Http\Controllers\ThreadController;
 use Auth;
-
 use App\User;
 use App\Role;
 
@@ -99,11 +99,11 @@ class IndexController extends Controller
             ->orderBy('subforums.pos', 'asc')
             ->get();
 
-        $users = DB::table('users')
+        $users = User::select()
             ->orderBy('id', 'desc')
             ->get();
 
-        $last_threads = DB::table('threads')
+        $last_threads = Thread::select()
             ->orderBy('threads.lastpost_date', 'desc')
             ->limit(10)
             ->where('published', '=', 1)
@@ -125,7 +125,8 @@ class IndexController extends Controller
 
         if (Auth::user()) {
             $direct_messagesQuery = DB::table('direct_messages')->where('to_uid', Auth::user()->id)->whereNotIn(
-                'direct_messages.id', function ($query) {
+                'direct_messages.id',
+                function ($query) {
                     $query->select('direct_id')
                         ->from('direct_views')
                         ->where('user_id', Auth::user()->id);
@@ -149,15 +150,18 @@ class IndexController extends Controller
     {
         $threads = DB::table('threads');
 
-        $query = $threads->where('subforum_id', $id)
+        $query = $threads->select(['*', 'users.name AS name', 'roles.name AS role_name'])
+            ->where('subforum_id', $id)
             ->where('published', '=', 1)
             ->orderBy('lastpost_date', 'desc')
+            ->join('users', 'users.id', '=', 'threads.lastpost_uid')
+            ->join('roles', 'roles.id', '=', 'users.primary_role')
             ->get();
 
         if (!$query->isEmpty()) {
-            $html = "<a href='/threads/show/".$query[0]->id."-".$query[0]->slug."?action=lastpost'>".str_limit($query[0]->title, 50)."</a>
-                <div>by <a href='/users/".ThreadController::getUserName($query[0]->lastpost_uid)."' class='".strtolower(ThreadController::getUserRoleName($query[0]->lastpost_uid))."'>".ThreadController::getUserName($query[0]->lastpost_uid)."</a></div>
-                <div>".$query[0]->lastpost_date."</div>";
+            $html = "<a href='/threads/show/" . $query[0]->id . "-" . $query[0]->slug . "?action=lastpost'>" . \Illuminate\Support\Str::limit($query[0]->title, 50) . "</a>
+                <div>by <a href='/users/" . $query[0]->name . "' class='" . $query[0]->role_name . "'>" . $query[0]->name . "</a></div>
+                <div>" . $query[0]->lastpost_date . "</div>";
             return $html;
         } else {
             return '-';
@@ -175,15 +179,18 @@ class IndexController extends Controller
     {
         $threads = DB::table('threads');
 
-        $query = $threads->where('id', $id)
+        $query = $threads->select(['*', 'users.name AS name', 'roles.name AS role_name'])
+            ->where('threads.id', $id)
             ->where('published', '=', 1)
+            ->join('users', 'users.id', '=', 'threads.lastpost_uid')
+            ->join('roles', 'roles.id', '=', 'users.primary_role')
             ->orderBy('lastpost_date', 'desc')
             ->get();
 
         if (!$query->isEmpty()) {
-             $html = "<a href='/threads/show/".$query[0]->id."-".$query[0]->slug."?action=lastpost'>".str_limit($query[0]->title, 50)."</a>
-                <div>by <a href='/users/".ThreadController::getUserName($query[0]->lastpost_uid)."' class='".strtolower(ThreadController::getUserRoleName($query[0]->lastpost_uid))."'>".ThreadController::getUserName($query[0]->lastpost_uid)."</a></div>
-                <div>".$query[0]->lastpost_date."</div>";
+             $html = "<a href='/threads/show/" . $query[0]->id . "-" . $query[0]->slug . "?action=lastpost'>" . \Illuminate\Support\Str::limit($query[0]->title, 50) . "</a>
+                <div>by <a href='/users/" . $query[0]->name . "' class='" . strtolower($query[0]->role_name) . "'>" . $query[0]->name . "</a></div>
+                <div>" . $query[0]->lastpost_date . "</div>";
             return $html;
         } else {
             return '-';
@@ -249,10 +256,9 @@ class IndexController extends Controller
                 $q->where('role_id', '=', $user[0]->primary_role);
             }]
         )
-        ->where('id', $userId)
-        ->get();
+            ->where('id', $userId)
+            ->get();
 
         return $query[0]->roles[0]->name;
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * ThreadController
- * 
+ *
  * @category Thread
  *
  * @package App\Http\Controllers
@@ -15,25 +15,25 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
+use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreThread as StoreThreadRequest;
 use App\Http\Requests\UpdateThread as UpdateThreadRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-
 use App\Thread;
 use App\User;
 use App\Role;
-
 use Auth;
-use Gate; 
+use Gate;
 
 /**
  * Handles all the Thread functionality in the system
- * 
+ *
  * @category Category
  *
  * @package App\Http\Controllers
@@ -48,10 +48,10 @@ class ThreadController extends Controller
 {
     /**
      * The show function of the ThreadController
-     * 
+     *
      * @param integer $id   id
      * @param string  $slug slug
-     * 
+     *
      * @return view
      */
     public function show($id, $slug)
@@ -86,7 +86,7 @@ class ThreadController extends Controller
                         $user->save();
                         $user->roles()->detach($member_Role);
                     }
-                }     
+                }
             } elseif ($count_warnings && $user->primary_role == $role->id) {
                 $member_Role = Role::where('name', '=', 'Member')->first();
                 $role = Role::where('name', '=', 'Banned')->first();
@@ -107,7 +107,7 @@ class ThreadController extends Controller
         }
 
         $thread = Thread::published()->where('id', '=', $id)->where('slug', '=', $slug)->firstOrFail();
-        $posts = DB::table('posts')->where('thread_id', $thread->id)->where('published', 1)->paginate(10);
+        $posts = Post::select()->where('thread_id', $thread->id)->where('published', 1)->paginate(10);
 
         $threads = DB::table('threads')->where('id', '=', $id);
 
@@ -129,7 +129,12 @@ class ThreadController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        $views = DB::table('threads_views')->where('thread_id', '=', $thread->id)->get();
+        $views = DB::table('threads_views')
+            ->select(['*', 'users.name AS name', 'roles.name AS role_name'])
+            ->where('thread_id', '=', $thread->id)
+            ->join('users', 'users.id', '=', 'threads_views.user_id')
+            ->join('roles', 'roles.id', '=', 'users.primary_role')
+            ->get();
 
         if (request()->has('action') && request()->action == 'lastpost') {
             $lastPage = $posts->lastPage();
@@ -139,10 +144,10 @@ class ThreadController extends Controller
             $lastPostId = $posts->last();
 
             if ($lastPage > 1) {
-                $url = URL::route('show_thread', ['id' => $id, 'slug' => $slug, 'page' => $lastPage])."#pid".$lastPostId->id;
+                $url = URL::route('show_thread', ['id' => $id, 'slug' => $slug, 'page' => $lastPage]) . "#pid" . $lastPostId->id;
                 return \Redirect::to($url);
             } elseif ($lastPostId) {
-                $url = URL::route('show_thread', ['id' => $id, 'slug' => $slug])."#pid".$lastPostId->id;
+                $url = URL::route('show_thread', ['id' => $id, 'slug' => $slug]) . "#pid" . $lastPostId->id;
                 return \Redirect::to($url);
             } else {
                 return redirect(action('ThreadController@show', ['id' => $id, 'slug' => $slug]));
@@ -151,13 +156,13 @@ class ThreadController extends Controller
 
         return view('threads.show', ['thread' => $thread, 'views' => $views, 'posts' => $posts, 'index' => $index + 1, 'page' => $page, 'subforum' => $subforum, 'last_threads' => $last_threads, 'users' => $users]);
     }
-    
+
     /**
      * The create page of the ThreadsController
-     * 
+     *
      * @param Request $request request
      * @param integer $id      id
-     * 
+     *
      * @return view
      */
     public function create(Request $request, $id)
@@ -177,18 +182,18 @@ class ThreadController extends Controller
                 return redirect()->route('index')->with('alert-danger', 'Thread does not exist.');
             } else {
                 $author = DB::table('users')->where('id', '=', $thread[0]->user_id)->get();
-                return view('posts.create', ['draft' => $draft, 'id' => $thread[0]->id, 'subforum_id' => $id, 'thread' => $author[0]->name."\n".$thread[0]->body]);    
+                return view('posts.create', ['draft' => $draft, 'id' => $thread[0]->id, 'subforum_id' => $id, 'thread' => $author[0]->name . "\n" . $thread[0]->body]);
             }
         } else {
-            return view('threads.create', ['draft' => $draft, 'id' => $id]); 
+            return view('threads.create', ['draft' => $draft, 'id' => $id]);
         }
     }
-    
+
     /**
      * The store function of the Threadscontroller
-     * 
+     *
      * @param StoreThreadRequest $request request
-     * 
+     *
      * @return redirect
      */
     public function store(StoreThreadRequest $request)
@@ -202,7 +207,7 @@ class ThreadController extends Controller
 
         $draft = config('app.draft');
 
-        if (strtolower(self::getUserRoleName(Auth::user()->id)) === 'administrator' || strtolower(self::getUserRoleName(Auth::user()->id)) === 'moderator' || $draft == false) {
+        if (strtolower(Auth::user()->role->name) === 'administrator' || strtolower(Auth::user()->role->name) === 'moderator' || $draft == false) {
             $data['updated_at'] = null;
             $data['published'] = 1;
         }
@@ -211,12 +216,12 @@ class ThreadController extends Controller
 
         return redirect()->route('index')->with('alert', 'Thread saved successfully.');
     }
-    
+
     /**
      * The edit page of the Threadscontroller
-     * 
+     *
      * @param Thread $thread thread
-     * 
+     *
      * @return view
      */
     public function edit(Thread $thread)
@@ -226,10 +231,10 @@ class ThreadController extends Controller
 
     /**
      * The update page of the Threadscontroller
-     * 
+     *
      * @param Thread              $thread  thread
      * @param UpdateThreadRequest $request request
-     * 
+     *
      * @return redirect
      */
     public function update(Thread $thread, UpdateThreadRequest $request)
@@ -239,10 +244,10 @@ class ThreadController extends Controller
         $thread->fill($data)->save();
         return redirect()->route('index')->with('alert', 'Thread successfully updated.');
     }
-    
+
     /**
      * The drafts page of the Threadscontroller
-     * 
+     *
      * @return view
      */
     public function drafts()
@@ -251,12 +256,12 @@ class ThreadController extends Controller
         $threads = $threadsQuery->paginate();
         return view('threads.drafts', compact('threads'));
     }
-    
+
     /**
      * The publish function of the Threadscontroller
-     * 
+     *
      * @param Thread $thread thread
-     * 
+     *
      * @return back
      */
     public function publish(Thread $thread)
@@ -266,64 +271,12 @@ class ThreadController extends Controller
         $thread->save();
         return back();
     }
-    
-    /**
-     * The getUserName function of the Threadscontroller
-     * 
-     * @param integer $userId userId
-     * 
-     * @return integer
-     */
-    static function getUserName($userId)
-    {
-        $users = DB::table('users');
-        $query = $users->where('id', $userId)->get();
 
-        return $query[0]->name;
-    }
-    
-    /**
-     * The getUserRoleName function of the Threadscontroller
-     * 
-     * @param integer $userId userId
-     * 
-     * @return integer
-     */
-    static function getUserRoleName($userId)
-    {
-        $user = User::where('id', $userId)->get();
-
-        $query = User::with(
-            ['roles' => function ($q) use ($user) {
-                $q->where('role_id', '=', $user[0]->primary_role);
-            }]
-        )
-        ->where('id', $userId)
-        ->get();
-
-        return $query[0]->roles[0]->name;
-    }
-    
-    /**
-     * The getUserAvatar function of the Threadscontroller
-     * 
-     * @param integer $userId userId
-     * 
-     * @return integer
-     */
-    static function getUserAvatar($userId)
-    {
-        $users = DB::table('users');
-        $query = $users->where('id', $userId)->get();
-
-        return $query[0]->user_avatar;
-    }
-    
     /**
      * The getUserTags function of the Threadscontroller
-     * 
+     *
      * @param string $string string
-     * 
+     *
      * @return string
      */
     static function getUserTags($string)
@@ -331,7 +284,8 @@ class ThreadController extends Controller
             $pattern = '/@([^ ]\w*)/';
 
             $result = preg_replace_callback(
-                $pattern, function ($matches) {
+                $pattern,
+                function ($matches) {
                     $replacement = false;
                     foreach ($matches as $key => $value) {
                         $users = DB::table('users');
@@ -339,24 +293,25 @@ class ThreadController extends Controller
                         $user = $users->where('name', $matches[1])->get();
 
                         if (!$user->isEmpty()) {
-                            $replacement = '<a href="/users/'.$user[$key]->name.'" class="'.strtolower(self::getUserRoleName($user[$key]->id)).'">@'.$user[$key]->name.'</a>';
+                            $replacement = '<a href="/users/' . $user[$key]->name . '" class="' . strtolower(self::getUserRoleName($user[$key]->id)) . '">@' . $user[$key]->name . '</a>';
                         } else {
-                            $replacement = '@'.$matches[1];
+                            $replacement = '@' . $matches[1];
                         }
 
                         return $replacement;
                     }
-                }, $string
+                },
+                $string
             );
 
             return $result;
     }
-    
+
     /**
      * The checkIfUserVotedThread function of the Threadscontroller
-     * 
+     *
      * @param integer $tid tid
-     * 
+     *
      * @return boolean
      */
     static function checkIfUserVotedThread($tid)
@@ -370,12 +325,12 @@ class ThreadController extends Controller
             return false;
         }
     }
-    
+
     /**
      * The checkIfUserVotedPost function of the Threadscontroller
-     * 
+     *
      * @param integer $pid pid
-     * 
+     *
      * @return boolean
      */
     static function checkIfUserVotedPost($pid)
@@ -389,5 +344,4 @@ class ThreadController extends Controller
             return false;
         }
     }
-    
 }

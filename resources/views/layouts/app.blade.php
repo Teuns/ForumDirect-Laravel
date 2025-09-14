@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\IndexController; ?>
+<?php
+
+use App\Http\Controllers\IndexController;
+
+?>
 
 <script type="application/javascript">
     window.Laravel = {!! json_encode([
@@ -57,7 +61,6 @@
 
       <nav class="nav nav-tabs px-lg-5 d-none d-lg-flex">
         <latte-ripple as="a" class="nav-link" href="/">Home</latte-ripple>
-        <latte-ripple class="nav-link">Calender</latte-ripple>
         <latte-ripple class="nav-link">Search</latte-ripple>
       </nav>
 
@@ -67,10 +70,10 @@
           <latte-ripple as="a" class="nav-link" href="/login">Account</latte-ripple>
         @else
           <latte-ripple as="a" class="nav-link" href="/users">Account</latte-ripple>
-          @if(Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'administrator' || Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'moderator' || Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'developer')
+          @if(Auth::user() && strtolower(Auth::user()->role->name) == 'administrator' || Auth::user() && strtolower(Auth::user()->role->name) == 'moderator' || Auth::user() && strtolower(Auth::user()->role->name) == 'developer')
             <latte-ripple as="a" class="nav-link" href="/modcp">ModCP</latte-ripple>
           @endif
-          @if(Auth::user() && strtolower(IndexController::GetUserRoleName(Auth::id())) == 'administrator' || Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'developer')
+          @if(Auth::user() && strtolower(Auth::user()->role->name) == 'administrator' || Auth::user() && strtolower(Auth::user()->role->name) == 'developer')
             <latte-ripple as="a" class="nav-link" href="/admincp">AdminCP</latte-ripple>
           @endif
           <latte-ripple as="a" class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log out</latte-ripple>
@@ -103,14 +106,13 @@
         <nav class="nav nav-list py-3" id="drawer-secondary">
           <div class="d-flex d-lg-none flex-column">
             <latte-ripple as="a" class="nav-link" href="/">Home</latte-ripple>
-            <latte-ripple class="nav-link">Calender</latte-ripple>
             <latte-ripple class="nav-link">Search</latte-ripple>
             @if (Auth::check())
               <latte-ripple as="a" class="nav-link" href="/users">Account</latte-ripple>
-              @if(Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'administrator' || Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'moderator' || Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'developer')
+              @if(Auth::user() && strtolower(Auth::user()->role->name) == 'administrator' || Auth::user() && strtolower(Auth::user()->role->name) == 'moderator' || Auth::user() && strtolower(Auth::user()->role->name) == 'developer')
                 <latte-ripple as="a" class="nav-link" href="/modcp">ModCP</latte-ripple>
               @endif
-              @if(Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'administrator' || Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'developer')
+              @if(Auth::user() && strtolower(Auth::user()->role->name) == 'administrator' || Auth::user() && strtolower(Auth::user()->role->name) == 'developer')
                 <latte-ripple as="a" class="nav-link" href="/admincp">AdminCP</latte-ripple>
               @endif
               <latte-ripple as="a" class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log out</latte-ripple>
@@ -127,7 +129,7 @@
 
   <!-- Body -->
 
-  @if(Auth::user() && strtolower(IndexController::getUserRoleName(Auth::id())) == 'guest')
+  @if(Auth::user() && strtolower(Auth::user()->role->name) == 'guest')
 
   <section>
     <div class="container my-3">

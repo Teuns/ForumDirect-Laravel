@@ -1,10 +1,14 @@
-<?php use \App\Http\Controllers\IndexController; ?>
+<?php
 
-    @extends('layouts.app') 
-    @section('pageTitle', 'Home') 
+use App\Http\Controllers\IndexController;
+
+?>
+
+    @extends('layouts.app')
+    @section('pageTitle', 'Home')
     @section('content')
 
-    <section>
+    <div>
         <div class="container pt-3">
             @if (session('alert-danger'))
                 <div class="notice notice-error" role="alert">
@@ -14,7 +18,7 @@
                 <div class="notice notice-warning" role="alert">
                     <p>{{ session('alert') }}</p>
                 </div>
-            @endif @if(Auth::user() && strtolower(IndexController::getUserRoleName(Auth::user()->id)) == 'administrator' or Auth::user() && strtolower(IndexController::getUserRoleName(Auth::user()->id) == 'moderator')) @if($count_reports)
+            @endif @if(Auth::user() && strtolower(Auth::user()->role->name) == 'administrator' or Auth::user() && strtolower(Auth::user()->role->name == 'moderator')) @if($count_reports)
                 <div class="notice notice-info" role="alert">
                     <p>Note: some reports are waiting to being reviewed.&nbsp;<a href="/modcp">Please take a look and perform an action.</a></p>
                 </div>
@@ -38,7 +42,7 @@
                 </div>
             @endif
 
-            @if(Auth::user() && IndexController::getUserRoleName(Auth::user()->id) == 'Banned')
+            @if(Auth::user() && Auth::user()->role->name == 'Banned')
                 <div class="notice notice-error" role="alert">
                     <p>Your account is banned. You cannot perform any action that requires permissions.</p>
                 </div>
@@ -47,12 +51,12 @@
 
             <div class="row">
                 <div class="col-12 col-xl-8">
-                   @if(Auth::user() && IndexController::getUserRoleName(Auth::user()->id) !== 'Banned')
+                   @if(Auth::user() && Auth::user()->role->name !== 'Banned')
                         {!! $chatbox !!}
                     @endif
 
-                    <?php $lastcat = 0; 
-                        $close_previous = 0;  
+                    <?php $lastcat = 0;
+                        $close_previous = 0;
                     ?>
 
                     @foreach ($forums as $row) @if($lastcat != $row->cat_id)
@@ -79,7 +83,7 @@
                                                 {!! IndexController::getLastPost($row->subcat_id) !!}
                                             </div>
                                         </div>
-                                        @endforeach 
+                                        @endforeach
                                         @if($forums->isEmpty())
                                             <p>Nothing to see here.</p>
                                         @else
@@ -101,7 +105,7 @@
                                         <div id="recent">
                                             <div class="list mb-0">
                                                 @foreach ($last_threads as $row)
-                                                    <div class="list-item"><div class="list-item-caption"><a href="/threads/show/{{ $row->id }}-{{ $row->slug }}?action=lastpost">{{ str_limit($row->title, 50) }}</a><br><small>by <a href="/users/{{ IndexController::GetUserName($row->lastpost_uid) }}" class="{{ strtolower(IndexController::GetUserRoleName($row->lastpost_uid)) }}">{{ IndexController::getUserName($row->lastpost_uid) }}</a> <span>created at {{ Carbon\Carbon::parse($row->lastpost_date)->diffForHumans() }}</span></small>
+                                                    <div class="list-item"><div class="list-item-caption"><a href="/threads/show/{{ $row->id }}-{{ $row->slug }}?action=lastpost">{{ \Illuminate\Support\Str::limit($row->title, 50) }}</a><br><small>by <a href="/users/{{ $row->lastUser->name }}" class="{{ strtolower($row->lastUser->role->name) }}">{{ $row->lastUser->name }}</a> <span>created at {{ Carbon\Carbon::parse($row->lastpost_date)->diffForHumans() }}</span></small>
                                                     </div></div>
                                                 @endforeach
                                                 @if($last_threads->isEmpty())
@@ -120,11 +124,13 @@
                                             <?php $resultstr = array(); ?>
                                             @foreach($users as $item)
                                                 @if($item->user_timestamp >= (new \Carbon\Carbon())->subMinutes(15))
-                                                    <div class="list-item"><div class="list-item-caption"><strong><a href='/users/{{ $item->name }}' class='{{ strtolower(IndexController::GetUserRoleName($item->id)) }}'>{{ $item->name }}</a></strong></div></div>
-                                                    <?php $resultstr[] = "<li><a href='/users/".$item->name."'>".$item->name."</a></li>"; ?>
+                                                    <div class="list-item"><div class="list-item-caption"><strong><a href='/users/{{ $item->name }}' class='{{ strtolower($item->role->name) }}'>{{ $item->name }}</a></strong></div></div>
+                                                    <?php $resultstr[] = "<li><a href='/users/" . $item->name . "'>" . $item->name . "</a></li>"; ?>
                                                 @endif
                                             @endforeach
-                                            <?php if(!$resultstr){ echo "-"; } ?>
+                                            <?php if (!$resultstr) {
+                                                echo "-";
+                                            } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +161,11 @@
                                     <div class="panel-footer">
                                         <div>Newest user:&nbsp;</div>
                                         @if(!$users->isEmpty())
-                                            <div><a href="/users/{{ $users[0]->name }}" class='<?php echo strtolower(IndexController::getUserRoleName($users[0]->id)); ?>'><?php if(!empty($users[0])){ echo $users[0]->name; }else{ echo '-'; } ?></a></div>
+                                            <div><a href="/users/{{ $users[0]->name }}" class='<?php echo strtolower($users[0]->role->name); ?>'><?php if (!empty($users[0])) {
+                                                echo $users[0]->name;
+                                                                                               } else {
+                                                                                                   echo '-';
+                                                                                               } ?></a></div>
                                         @else
                                             <div><p>-</p></div>
                                         @endif
