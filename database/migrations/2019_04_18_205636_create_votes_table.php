@@ -16,10 +16,10 @@ class CreateVotesTable extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id');
-            $table->integer('thread_id');
-            $table->integer('tid');
-            $table->integer('pid');
-            
+            $table->integer('thread_id')->nullable();
+            $table->integer('tid')->nullable();
+            $table->integer('pid')->nullable();
+
             $table->timestamps();
         });
     }
