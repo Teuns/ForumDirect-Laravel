@@ -10,7 +10,7 @@
                     @foreach($posts as $post)
                     <div class="thread">
                         <h3><a href="{{ route('index', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
-                        <p>{{ str_limit($post->body, 50) }}</p>
+                        <p>{{ \Illuminate\Support\Str::limit($post->body, 50) }}</p>
                         <p>
                             @can('publish-post')
                             <a href="{{ route('publish_post', ['id' => $post->id]) }}" class="btn btn-primary" role="button">Publish</a> @endcan

@@ -2,7 +2,7 @@
 
 /**
  * PostController
- * 
+ *
  * @category User
  *
  * @package App\Http\Controllers
@@ -15,24 +15,22 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost as StorePostRequest;
 use App\Http\Requests\UpdatePost as UpdatePostRequest;
 use Illuminate\Support\Facades\DB;
-
-use \App\Http\Controllers\ThreadController; 
-
+use App\Http\Controllers\ThreadController;
 use Auth;
 use Gate;
-
 use App\Post;
 use App\User;
 
 /**
  * Handles all the Post functionality in the system
- * 
+ *
  * @category Post
  *
  * @package App\Http\Controllers
@@ -45,13 +43,12 @@ use App\User;
  */
 class PostController extends Controller
 {
-   
     /**
      * The create page of the PostController
-     * 
+     *
      * @param Request $request request
      * @param integer $id      id
-     * 
+     *
      * @return view
      */
     public function create(Request $request, $id)
@@ -64,7 +61,7 @@ class PostController extends Controller
             return redirect()->route('index')->with('alert-danger', 'Topic does not exist.');
         }
 
-        if (!$query[0]->closed or ThreadController::getUserRoleName(Auth::user()->id) == 'Administrator' or ThreadController::getUserRoleName(Auth::user()->id) == 'Moderator') {
+        if (!$query[0]->closed or Auth::user()->role->name == 'Administrator' or Auth::user()->role->name == 'Moderator') {
             if ($request->has('id')) {
                 $post = DB::table('posts')->where('id', '=', $request->id)->get();
 
@@ -73,7 +70,7 @@ class PostController extends Controller
                 } else {
                     $author = DB::table('users')->where('id', '=', $post[0]->user_id)->get();
 
-                    return view('posts.create', ['draft' => $draft, 'id' => $id, 'subforum_id' => $query[0]->subforum_id, 'post' => $author[0]->name."\n".$post[0]->body]);
+                    return view('posts.create', ['draft' => $draft, 'id' => $id, 'subforum_id' => $query[0]->subforum_id, 'post' => $author[0]->name . "\n" . $post[0]->body]);
                 }
             } else {
                 return view('posts.create', ['draft' => $draft, 'id' => $id, 'subforum_id' => $query[0]->subforum_id]);
@@ -81,14 +78,13 @@ class PostController extends Controller
         } else {
             return redirect()->route('index')->with('alert-danger', 'Topic is closed.');
         }
-
     }
-    
+
     /**
      * The store function of the PostController
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function store(StorePostRequest $request)
@@ -100,7 +96,7 @@ class PostController extends Controller
 
         $draft = config('app.draft');
 
-        if (ThreadController::getUserRoleName(Auth::user()->id) === 'Administrator' || ThreadController::getUserRoleName(Auth::user()->id) === 'Moderator' || $draft == false) {
+        if (Auth::user()->role->name === 'Administrator' || Auth::user()->role->name === 'Moderator' || $draft == false) {
             $data['updated_at'] = null;
             $data['published'] = 1;
             $query = DB::table('threads')
@@ -112,10 +108,10 @@ class PostController extends Controller
 
         return redirect()->route('index')->with('alert', 'Post has been saved successfully.');
     }
-    
+
     /**
      * The drafts page of the PostController
-     * 
+     *
      * @return view
      */
     public function drafts()
@@ -124,25 +120,25 @@ class PostController extends Controller
         $posts = $postsQuery->paginate();
         return view('posts.drafts', compact('posts'));
     }
-     
+
     /**
      * The edit function of the PostController
-     * 
+     *
      * @param Post $post post
-     * 
+     *
      * @return view
      */
     public function edit(Post $post)
     {
         return view('posts.edit', compact('post'));
     }
-    
+
     /**
      * The update function of the PostController
-     * 
+     *
      * @param Post              $post    post
      * @param UpdatePostRequest $request request
-     * 
+     *
      * @return view
      */
     public function update(Post $post, UpdatePostRequest $request)
@@ -151,12 +147,12 @@ class PostController extends Controller
         $post->fill($data)->save();
         return redirect()->route('index')->with('alert', 'Post successfully updated.');
     }
-    
+
     /**
      * The publish function of the PostController
-     * 
+     *
      * @param Post $post post
-     * 
+     *
      * @return view
      */
     public function publish(Post $post)
@@ -173,5 +169,4 @@ class PostController extends Controller
 
         return back();
     }
-
 }

@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\AdminController; ?>
+<?php
+
+use App\Http\Controllers\AdminController;
+
+?>
 
 @extends('layouts.admin')
 

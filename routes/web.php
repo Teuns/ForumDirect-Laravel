@@ -31,7 +31,7 @@ Route::get('/direct/view/{id}', 'DirectController@view');
 
 Route::post('/direct/reply/{id}', 'DirectController@reply');
 
-Route::match(array('GET', 'POST'),'/direct/create', 'DirectController@create');
+Route::match(array('GET', 'POST'), '/direct/create', 'DirectController@create');
 
 Route::get('/api/v1/users/name/{username}', 'ApiController@getUserNameCorrectly');
 
@@ -51,11 +51,11 @@ Route::get('/modcp', 'ModController@index');
 
 Route::get('/modcp/posts', 'ModController@posts');
 
-Route::match(array('GET', 'POST'),'/modcp/edit-post/{id}', 'ModController@editPost');
+Route::match(array('GET', 'POST'), '/modcp/edit-post/{id}', 'ModController@editPost');
 
 Route::get('/modcp/threads', 'ModController@threads');
 
-Route::match(array('GET', 'POST'),'/modcp/edit-thread/{id}', 'ModController@editThread');
+Route::match(array('GET', 'POST'), '/modcp/edit-thread/{id}', 'ModController@editThread');
 
 Route::get('/modcp/report/{id}', 'ModController@report');
 
@@ -65,7 +65,7 @@ Route::get('/modcp/posts/delete/{id}', 'ModController@deletePost');
 
 Route::get('/modcp/threads/delete/{id}', 'ModController@deleteThread');
 
-Route::match(array('GET', 'POST'),'/modcp/warnUser', 'ModController@warnUser');
+Route::match(array('GET', 'POST'), '/modcp/warnUser', 'ModController@warnUser');
 
 Route::get('/modcp/ban/{id}', 'ModController@banUser');
 
@@ -75,25 +75,25 @@ Route::get('/admincp', 'AdminController@index');
 
 Route::get('/admincp/users', 'AdminController@users');
 
-Route::match(array('GET', 'POST'),'/admincp/users/edit/{id}', 'AdminController@editAccount');
+Route::match(array('GET', 'POST'), '/admincp/users/edit/{id}', 'AdminController@editAccount');
 
 Route::get('/admincp/forums', 'AdminController@forums')->name('admincp_forums');
 
-Route::match(array('GET', 'POST'),'/admincp/forums/edit/{id}', 'AdminController@editForum');
+Route::match(array('GET', 'POST'), '/admincp/forums/edit/{id}', 'AdminController@editForum');
 
-Route::match(array('GET', 'POST'),'/admincp/forums/create/', 'AdminController@createForum');
+Route::match(array('GET', 'POST'), '/admincp/forums/create/', 'AdminController@createForum');
 
 Route::get('/admincp/forums/delete/{id}', 'AdminController@deleteForum');
 
-Route::match(array('GET', 'POST'),'/admincp/subforums/create', 'AdminController@createSubforum');
+Route::match(array('GET', 'POST'), '/admincp/subforums/create', 'AdminController@createSubforum');
 
 Route::get('/admincp/subforums/delete/{id}', 'AdminController@deleteSubforum');
 
-Route::match(array('GET', 'POST'),'/admincp/subforums/edit/{id}', 'AdminController@editSubforum');
+Route::match(array('GET', 'POST'), '/admincp/subforums/edit/{id}', 'AdminController@editSubforum');
 
-Route::match(array('GET', 'POST'),'/users/edit-account', 'UsersController@editAccount');
+Route::match(array('GET', 'POST'), '/users/edit-account', 'UsersController@editAccount');
 
-Route::match(array('GET', 'POST'),'/users/upload-avatar', 'UsersController@uploadAvatar');
+Route::match(array('GET', 'POST'), '/users/upload-avatar', 'UsersController@uploadAvatar');
 
 Route::get('/users/{name}', 'UsersController@profile');
 

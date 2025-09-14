@@ -18,16 +18,17 @@ class Role extends Model
         return $this->belongsToMany(User::class, 'role_users');
     }
 
-    public function hasAccess(array $permissions) : bool
+    public function hasAccess(array $permissions): bool
     {
         foreach ($permissions as $permission) {
-            if ($this->hasPermission($permission))
+            if ($this->hasPermission($permission)) {
                 return true;
+            }
         }
         return false;
     }
 
-    private function hasPermission(string $permission) : bool
+    private function hasPermission(string $permission): bool
     {
         return $this->permissions[$permission] ?? false;
     }

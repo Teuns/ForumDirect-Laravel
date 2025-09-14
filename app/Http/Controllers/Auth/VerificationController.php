@@ -7,7 +7,6 @@ use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Input;
-
 use App\Role;
 
 class VerificationController extends Controller
@@ -22,7 +21,6 @@ class VerificationController extends Controller
     | be re-sent if the user didn't receive the original email message.
     |
     */
-
     use VerifiesEmails;
 
     /**
@@ -47,7 +45,8 @@ class VerificationController extends Controller
     public function verify(Request $request)
     {
         if ($request->route('id') == $request->user()->getKey() && $request->user()->email_verified_at == null &&
-            $request->user()->markEmailAsVerified()) {
+            $request->user()->markEmailAsVerified()
+        ) {
             event(new Verified($request->user()));
             $user = $request->user();
             $role = Role::where('name', '=', 'Member')->first();

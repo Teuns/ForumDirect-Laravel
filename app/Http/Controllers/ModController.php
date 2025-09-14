@@ -2,7 +2,7 @@
 
 /**
  * ModController
- * 
+ *
  * @category Mod
  *
  * @package App\Http\Controllers
@@ -15,20 +15,19 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Auth;
-
 use App\User;
 use App\Post;
 use App\Thread;
 
 /**
  * Handles all the Mod functionality in the system
- * 
+ *
  * @category Mod
  *
  * @package App\Http\Controllers
@@ -53,7 +52,7 @@ class ModController extends Controller
 
     /**
      * The getUserRoleName function of the ModController
-     * 
+     *
      * @param integer $userId userId
      *
      * @return string
@@ -63,19 +62,21 @@ class ModController extends Controller
         $user = User::where('id', $userId)->get();
 
         $query = User::with(
-            ['roles' => function ($q) use ($user) {
+            [
+            'roles' => function ($q) use ($user) {
                 $q->where('role_id', '=', $user[0]->primary_role);
-            }]
+            },
+            ]
         )
         ->where('id', $userId)
         ->get();
 
         return $query[0]->roles[0]->name;
     }
-    
+
     /**
      * The index page of the Mod CP
-     * 
+     *
      * @return response
      */
     public function index()
@@ -93,12 +94,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The warnUser page of the Mod CP
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function warnUser(Request $request)
@@ -110,7 +111,7 @@ class ModController extends Controller
                 'reason' => 'required',
                 'percentage' => 'required',
                 'to_name' => 'required',
-                'valid_until' => 'required'
+                'valid_until' => 'required',
                 ]
             );
 
@@ -130,8 +131,8 @@ class ModController extends Controller
 
             if ($query->insert($data)) {
                 $data2 = [];
-                $data2["name"] = "You have been warned for: ".$data["reason"];
-                $data2["body"] = "This warning is valid until: ".$data["valid_until"].". Percentage: ".$data["percentage"]."%";
+                $data2["name"] = "You have been warned for: " . $data["reason"];
+                $data2["body"] = "This warning is valid until: " . $data["valid_until"] . ". Percentage: " . $data["percentage"] . "%";
                 $data2["to_uid"] = $user[0]->id;
                 $data2["from_uid"] = Auth::user()->id;
                 $data2["user_id"] = Auth::user()->id;
@@ -152,12 +153,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The banUser function of the Mod CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return view
      */
     public function banUser($id)
@@ -176,12 +177,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The unbanUser function of the Mod CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return view
      */
     public function unbanUser($id)
@@ -200,12 +201,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The report page of the Mod CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return view
      */
     public function report($id)
@@ -219,12 +220,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The deleteReport function of the Mod CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return redirect
      */
     public function deleteReport($id)
@@ -240,12 +241,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The deletePost function of the Mod CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return redirect
      */
     public function deletePost($id)
@@ -264,12 +265,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The deleteThread function of the Mod CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return redirect
      */
     public function deleteThread($id)
@@ -288,12 +289,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The getThread function of the Mod CP
-     * 
+     *
      * @param integer $tid tid
-     * 
+     *
      * @return string
      */
     static function getThread($tid)
@@ -308,12 +309,12 @@ class ModController extends Controller
             return "Thread doesn't exist anymore.";
         }
     }
-    
+
     /**
      * The getPost function of the Mod CP
-     * 
+     *
      * @param integer $pid pid
-     * 
+     *
      * @return string
      */
     static function getPost($pid)
@@ -328,10 +329,10 @@ class ModController extends Controller
             return "Post doesn't exist anymore.";
         }
     }
-    
+
     /**
      * The posts page of the Mod CP
-     * 
+     *
      * @return view
      */
     public function posts()
@@ -347,13 +348,13 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The editPost page of the Mod CP
-     * 
+     *
      * @param Request $request request
      * @param intger  $id      id
-     * 
+     *
      * @return view
      */
     public function editPost(Request $request, $id)
@@ -373,12 +374,12 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The threads page of the Mod CP
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function threads()
@@ -394,13 +395,13 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * The editThread page of the Mod CP
-     * 
+     *
      * @param Request $request request
      * @param intger  $id      id
-     * 
+     *
      * @return view
      */
     public function editThread(Request $request, $id)
@@ -420,5 +421,4 @@ class ModController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
 }

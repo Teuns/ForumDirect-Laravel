@@ -10,11 +10,11 @@
                     @foreach($threads as $thread)
                     <div class="thread">
                         <h3><a href="{{ route('show_thread', ['id' => $thread->id, 'slug' => $thread->slug]) }}">{{ $thread->title }}</a></h3>
-                        <p>{{ str_limit($thread->body, 50) }}</p>
+                        <p>{{ \Illuminate\Support\Str::limit($thread->body, 50) }}</p>
                         <p>
                             <hr /> @can('publish-thread')
-                            <a href="{{ route('publish_thread', ['id' => $thread->id]) }}" class="btn btn-primary" role="button">Publish</a> @endcan
-                            <a href="{{ route('edit_thread', ['id' => $thread->id]) }}" class="btn btn-secondary" role="button">Edit</a>
+                            <a href="{{ route('publish_thread', ['thread' => $thread]) }}" class="btn btn-primary" role="button">Publish</a> @endcan
+                            <a href="{{ route('edit_thread', ['thread' => $thread]) }}" class="btn btn-secondary" role="button">Edit</a>
                         </p>
                     </div>
                     <br> @endforeach @if($threads->isEmpty())

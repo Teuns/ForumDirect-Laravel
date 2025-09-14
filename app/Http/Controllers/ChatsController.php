@@ -15,6 +15,7 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use App\Message;
@@ -22,7 +23,6 @@ use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 use App\User;
 
 /**
@@ -81,7 +81,7 @@ class ChatsController extends Controller
                 'message' => $request->input('message'),
                 'type' => $request->input('type'),
                 'to_uid' => $request->input('to_uid'),
-                'from_uid' => $request->input('from_uid')
+                'from_uid' => $request->input('from_uid'),
             ]);
         } else {
             $message = $user->messages()->create([
@@ -92,5 +92,4 @@ class ChatsController extends Controller
         broadcast(new MessageSent($user, $message))->toOthers();
         return ['status' => 'Message Sent!'];
     }
-
 }

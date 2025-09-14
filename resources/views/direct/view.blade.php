@@ -1,6 +1,9 @@
-<?php use \App\Http\Controllers\IndexController; 
-use \App\Http\Controllers\ThreadController; 
-use \App\ForumDirectParsedown;
+<?php
+
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\ThreadController;
+use App\ForumDirectParsedown;
+
 ?>
 
 <style>
@@ -56,8 +59,8 @@ use \App\ForumDirectParsedown;
                                   <?php $parsedown = new ForumDirectParsedown();
                                     $parsedown->setMarkupEscaped(true);
                                     $parsedown->setBreaksEnabled(true);
-                                    echo ThreadController::getUserTags($parsedown->text($row->body)); 
-                                  ?>
+                                    echo ThreadController::getUserTags($parsedown->text($row->body));
+                                    ?>
                                 </div>
                               </div>
                               <br>

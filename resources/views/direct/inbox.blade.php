@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
-<?php use \App\Http\Controllers\IndexController; 
+<?php
+
+use App\Http\Controllers\IndexController;
+
 ?>
 
 @section('pageTitle', 'User - Inbox')

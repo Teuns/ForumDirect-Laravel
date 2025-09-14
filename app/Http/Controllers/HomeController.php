@@ -2,7 +2,7 @@
 
 /**
  * HomeController
- * 
+ *
  * @category Home
  *
  * @package App\Http\Controllers
@@ -15,13 +15,14 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 /**
  * Handles all the Home functionality in the system
- * 
+ *
  * @category Mod
  *
  * @package App\Http\Controllers

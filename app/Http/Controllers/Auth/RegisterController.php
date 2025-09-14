@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-Use App\Role;
+use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
 use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 
 class RegisterController extends Controller
@@ -23,7 +22,6 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
     use RegistersUsers;
 
     /**
@@ -77,11 +75,10 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'user_avatar' => $image->stream('data-url', 100),
-            'primary_role' => $role->id
+            'primary_role' => $role->id,
         ]);
 
         $user->roles()->attach($role);
         return $user;
     }
-
 }

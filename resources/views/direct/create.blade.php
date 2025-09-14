@@ -1,6 +1,9 @@
-<?php use \App\Http\Controllers\IndexController; 
-use \App\Http\Controllers\ThreadController; 
-use \App\ForumDirectParsedown;
+<?php
+
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\ThreadController;
+use App\ForumDirectParsedown;
+
 ?>
 
 <style>

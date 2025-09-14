@@ -3,7 +3,6 @@
 namespace App;
 
 use Parsedown;
-
 use Emojione\Client;
 use Emojione\Ruleset;
 
@@ -19,5 +18,4 @@ class ForumDirectParsedown extends Parsedown
 
         return $text;
     }
- 
 }

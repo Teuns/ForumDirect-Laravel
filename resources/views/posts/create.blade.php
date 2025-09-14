@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\IndexController; ?>
+<?php
+
+use App\Http\Controllers\IndexController;
+
+?>
 
 <style>
     .CodeMirror {
@@ -31,7 +35,13 @@
                     <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }} form-group">
                         <label for="body">Body</label>
 
-                        <textarea class="form-control" name="body" id="body" cols="30" rows="10" class="form-control"><?php if(isset($post)){ echo $post; }else{ if(isset($thread)){ echo $thread; }} ?></textarea>
+                        <textarea class="form-control" name="body" id="body" cols="30" rows="10" class="form-control"><?php if (isset($post)) {
+                            echo $post;
+                                                                                                                      } else {
+                                                                                                                          if (isset($thread)) {
+                                                                                                                              echo $thread;
+                                                                                                                          }
+                                                                                                                      } ?></textarea>
                         @if ($errors->has('body'))
                         <span class="help-block">
                             <strong>{{ $errors->first('body') }}</strong>

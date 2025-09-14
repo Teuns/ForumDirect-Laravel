@@ -25,7 +25,7 @@ class UpdatePost extends FormRequest
     public function rules()
     {
         $id = $this->route('post')->id;
-        return [ 
+        return [
             'body' => 'required',
         ];
     }

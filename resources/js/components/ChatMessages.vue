@@ -1,10 +1,10 @@
 <template>
     <ul class="chat">
         <div v-if="loading">Loading...</div>
-        <li v-for="message in messages" v-if="message.type !== 'whisper' || message.type == 'whisper' && message.to_uid == user.id || message.type == 'whisper' && message.from_uid == user.id">
+        <li v-for="message in filteredMessages" :key="message.id">
             <div class="chat-body">
                 <div class="header">
-                    <a v-bind:href="'/users/'+ message.user.name"><img v-bind:src=message.user.user_avatar style="max-width: 20px; vertical-align: middle;"></a>
+                    <a v-bind:href="'/users/'+ message.user.name"><img v-bind:src=message.user.user_avatar style="max-width: 20px; vertical-align: middle; margin-right: 8px;"></a>
                     <span onclick="var command = '/whisper ' + this.innerText + ' '; document.getElementById('chat-input').value = command; document.getElementById('chat-input').focus();" :inner-html.prop="message.user | messageAuthor">{{ message.user | messageAuthor }}</span>
                     <p style="float:right;">{{ message.created_at | formatDate }}</p>
                 </div>
@@ -15,32 +15,40 @@
 </template>
 
 <script>
-    export default {
-        props: ['messages', 'user'],
+export default {
+    props: ['messages', 'user'],
 
-        data () {
-            return {
-                loading: false,
-            }
-        },
+    data () {
+        return {
+            loading: false,
+        }
+    },
 
-        created () {
-            this.fetchData()
-        },
+    computed: {
+        filteredMessages: function() {
+            return this.messages.filter((message) =>
+                message.type !== 'whisper' || message.type === 'whisper'
+                && parseInt(message.to_uid) === this.user.id
+                || message.type === 'whisper' && parseInt(message.from_uid) === this.user.id);
+        }
+    },
 
-         watch: {
-            '$route': 'fetchData'
-        },
+    created () {
+        this.fetchData()
+    },
 
-        methods: {
-            fetchData () {
-                this.loading = true;
-                axios.get('/messages').then(response => {
-                    console.log(response);
-                    window.app.messages = response.data;
-                    this.loading = false;
-                });
-            }
+    watch: {
+        '$route': 'fetchData'
+    },
+
+    methods: {
+        fetchData () {
+            this.loading = true;
+            axios.get('/messages').then(response => {
+                window.app.messages = response.data;
+                this.loading = false;
+            });
         }
     }
+}
 </script>

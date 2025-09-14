@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\IndexController; ?>
+<?php
+
+use App\Http\Controllers\IndexController;
+
+?>
 
 <style>
     .CodeMirror {

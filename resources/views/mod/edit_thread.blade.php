@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\IndexController; ?>
+<?php
+
+use App\Http\Controllers\IndexController;
+
+?>
 
 @extends('layouts.app')
 
@@ -46,7 +50,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="label">Closed (current: <?php if($thread->closed == 1){ echo 'YES'; }else{ echo 'NO'; } ?>)</label>
+                                    <label class="label">Closed (current: <?php if ($thread->closed == 1) {
+                                        echo 'YES';
+                                                                          } else {
+                                                                              echo 'NO';
+                                                                          } ?>)</label>
                                     <div class="control">
                                         <div class="select">
                                             <select name="closed" class="form-control">

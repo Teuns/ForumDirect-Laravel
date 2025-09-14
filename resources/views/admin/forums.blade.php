@@ -57,8 +57,8 @@
                 Forums
             </div>
             <div class="card-body">
-                <?php $lastcat = 0; 
-                    $close_previous = 0;  
+                <?php $lastcat = 0;
+                    $close_previous = 0;
                 ?>
 
                 <div class="list-group list-group-root card">

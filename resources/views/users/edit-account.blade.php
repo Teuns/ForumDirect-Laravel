@@ -1,4 +1,8 @@
-<?php use \App\Http\Controllers\UsersController; ?>
+<?php
+
+use App\Http\Controllers\UsersController;
+
+?>
 
 @extends('layouts.app')
 

@@ -2,7 +2,7 @@
 
 /**
  * DirectController
- * 
+ *
  * @category Direct
  *
  * @package App\Http\Controllers
@@ -15,19 +15,18 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Auth;
 use Gate;
-
 use App\User;
 
 /**
  * Handles all the Direct functionality in the system
- * 
+ *
  * @category Post
  *
  * @package App\Http\Controllers
@@ -49,10 +48,10 @@ class DirectController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * The inbox page of the Direct CP
-     * 
+     *
      * @return view
      */
     public function inbox()
@@ -61,10 +60,10 @@ class DirectController extends Controller
         $direct_messages = $direct_messagesQuery->paginate();
         return view('direct.inbox', compact('direct_messages'));
     }
-    
+
     /**
      * The outbox page of the Direct CP
-     * 
+     *
      * @return view
      */
     public function outbox()
@@ -73,12 +72,12 @@ class DirectController extends Controller
         $direct_messages = $direct_messagesQuery->paginate();
         return view('direct.outbox', compact('direct_messages'));
     }
-    
+
     /**
      * The outbox page of the Direct CP
      *
      * @param integer $id id
-     * 
+     *
      * @return view
      */
     public function view($id)
@@ -99,12 +98,12 @@ class DirectController extends Controller
 
         return view('direct.view', ['rows' => $query]);
     }
-    
+
     /**
      * The create page of the Direct CP
      *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function create(Request $request)
@@ -115,7 +114,7 @@ class DirectController extends Controller
                 [
                 'name' => 'required|min:4|',
                 'body' => 'required',
-                'to_name' => 'required'
+                'to_name' => 'required',
                 ]
             );
 
@@ -144,13 +143,13 @@ class DirectController extends Controller
 
         return view('direct.create');
     }
-     
+
     /**
      * The reply page of the Direct CP
-     * 
+     *
      * @param integer $id      id
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function reply($id, Request $request)
@@ -158,7 +157,7 @@ class DirectController extends Controller
         $data = $request->only('body', 'direct_id', 'name', 'to_uid');
         $request->validate(
             [
-            'body' => 'required'
+            'body' => 'required',
             ]
         );
 

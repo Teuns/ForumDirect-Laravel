@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Events;
 
 use App\User;
@@ -12,7 +13,9 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 
 class MessageSent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $queue = 'default';
 

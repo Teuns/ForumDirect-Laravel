@@ -18,7 +18,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
     use AuthenticatesUsers;
 
     /**
@@ -30,7 +29,7 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        session()->flash('alert', 'Welcome back!'); 
+        session()->flash('alert', 'Welcome back!');
         return $this->redirectTo;
     }
 

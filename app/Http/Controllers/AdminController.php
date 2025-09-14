@@ -2,7 +2,7 @@
 
 /**
  * AdminController
- * 
+ *
  * @category Admin
  *
  * @package App\Http\Controllers
@@ -15,19 +15,19 @@
  *
  * @php 7
  */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
 use App\User;
 use App\Role;
 use Auth;
 
 /**
  * Handles all the Admin functionality in the system
- * 
+ *
  * @category Category
  *
  * @package App\Http\Controllers
@@ -62,19 +62,21 @@ class AdminController extends Controller
         $user = User::where('id', $userId)->get();
 
         $query = User::with(
-            ['roles' => function ($q) use ($user) {
+            [
+            'roles' => function ($q) use ($user) {
                 $q->where('role_id', '=', $user[0]->primary_role);
-            }]
+            },
+            ]
         )
         ->where('id', $userId)
         ->get();
 
         return $query[0]->roles[0]->name;
     }
-    
+
     /**
      * Index of the Admin CP
-     * 
+     *
      * @return response
      */
     public function index()
@@ -99,7 +101,7 @@ class AdminController extends Controller
 
     /**
      * Users page of the Admin CP
-     * 
+     *
      * @return response
      */
     public function users()
@@ -113,10 +115,10 @@ class AdminController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * Forums page of the Admin CP
-     * 
+     *
      * @return response
      */
     public function forums()
@@ -141,12 +143,12 @@ class AdminController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
     }
-    
+
     /**
      * Create Forum page of the Admin CP
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return redirect
      */
     public function createForum(Request $request)
@@ -161,7 +163,7 @@ class AdminController extends Controller
         if ($request->isMethod('post')) {
             $request->validate(
                 [
-                'name' => 'min:3'
+                'name' => 'min:3',
                 ]
             );
 
@@ -174,13 +176,13 @@ class AdminController extends Controller
 
         return view('admin/create-forum');
     }
-    
+
     /**
      * Edit Forum page of the Admin CP
-     * 
-     * @param Request $request request 
+     *
+     * @param Request $request request
      * @param integer $id      id
-     * 
+     *
      * @return back
      */
     public function editForum(Request $request, $id)
@@ -195,7 +197,7 @@ class AdminController extends Controller
         if ($request->isMethod('post')) {
             $request->validate(
                 [
-                'name' => 'min:3'
+                'name' => 'min:3',
                 ]
             );
 
@@ -211,10 +213,10 @@ class AdminController extends Controller
 
     /**
      * The delete forum page of the Admin CP
-     * 
+     *
      * @param Request $request request
      * @param integer $id      id
-     * 
+     *
      * @return back
      */
     public function deleteForum(Request $request, $id)
@@ -230,12 +232,12 @@ class AdminController extends Controller
 
         return back();
     }
-    
+
     /**
      * The get Forum Name function of the Admin CP
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return string
      */
     static function getForumName($id)
@@ -248,9 +250,9 @@ class AdminController extends Controller
 
     /**
      * The createSubforum page of the Admin CP
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return redirect
      */
     public function createSubforum(Request $request)
@@ -267,7 +269,7 @@ class AdminController extends Controller
         if ($request->isMethod('post')) {
             $request->validate(
                 [
-                'name' => 'min:3'
+                'name' => 'min:3',
                 ]
             );
 
@@ -281,14 +283,14 @@ class AdminController extends Controller
         }
 
         return view('admin/create-subforum', ['forums' => $forums]);
-    } 
+    }
 
     /**
      * The editSubforum page of the Admin CP
-     * 
+     *
      * @param Request $request request
      * @param integer $id      id
-     * 
+     *
      * @return view
      */
     public function editSubforum(Request $request, $id)
@@ -305,7 +307,7 @@ class AdminController extends Controller
         if ($request->isMethod('post')) {
             $request->validate(
                 [
-                'name' => 'min:3'
+                'name' => 'min:3',
                 ]
             );
 
@@ -323,10 +325,10 @@ class AdminController extends Controller
 
     /**
      * The deleteSubforum page of the Admin CP
-     * 
+     *
      * @param Request $request request
      * @param integer $id      id
-     * 
+     *
      * @return back
      */
     public function deleteSubforum(Request $request, $id)
@@ -342,13 +344,13 @@ class AdminController extends Controller
 
         return back();
     }
-    
+
     /**
      * The edit account page of the Admin CP
-     * 
+     *
      * @param Request $request request
      * @param integer $userId  userId
-     * 
+     *
      * @return view
      */
     public function editAccount(Request $request, $userId)
@@ -370,11 +372,11 @@ class AdminController extends Controller
 
             $data = $request->only('email', 'name', 'avatar', 'role', 'primary_role');
             $role = Role::where('name', '=', $data['role'])->first();
-            
+
             if ($role) {
                 $user->roles()->sync($role);
                 $data['primary_role'] = $role->id;
-            }      
+            }
             $user->user_avatar = $data['avatar'];
             $user->fill($data)->save();
 
@@ -383,5 +385,4 @@ class AdminController extends Controller
 
         return view('admin/edit-account', ['user' => $user]);
     }
-
 }
