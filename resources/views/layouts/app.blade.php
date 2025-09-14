@@ -3,7 +3,7 @@
 <script type="application/javascript">
     window.Laravel = {!! json_encode([
         'csrfToken' => csrf_token(),
-        'host' => 'https://server.teunstrik.com:2053',
+        'host' => 'ws://localhost:8080',
     ]) !!};
 </script>
 
@@ -36,14 +36,16 @@
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.7.95/css/materialdesignicons.min.css"/>
 
     <link rel="stylesheet" href="https://unpkg.com/@bybas/latte-ui@1.7.0/dist/latte-ui.css"/>
-    
+
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
     <link href="{{ asset('css/app.css?md5='.md5_file('css/app.css')) }}" rel="stylesheet">
 
     <link href="{{ asset('css/prism.css') }}" rel="stylesheet">
-    
+
     <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    @vite(['resources/js/app.js'])
 </head>
 <body>
 <main id="app">
@@ -163,7 +165,6 @@
 </main>
 
 <script src="{{ asset('js/prism.js') }}"></script>
-<script src="{{ asset('js/app.js?md5='.md5_file('js/app.js')) }}"></script>
 
 </body>
 

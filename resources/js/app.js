@@ -1,10 +1,17 @@
-require('./bootstrap');
+import './bootstrap';
+import emojione from 'emojione';
+import linkifyHtml from 'linkify-html';
+import ChatMessagesComponent from './components/ChatMessages.vue';
+import ChatFormComponent from './components/ChatForm.vue';
+import LatteUI from "@bybas/latte-ui";
 
-Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
-Vue.component('chat-form', require('./components/ChatForm.vue').default);
+Vue.use(LatteUI);
+
+Vue.component('chat-messages', ChatMessagesComponent);
+Vue.component('chat-form', ChatFormComponent);
 
 window.app = new Vue({
-    el: 'main#app',
+    el: '#app',
 
     data: {
         messages: [],
@@ -13,23 +20,24 @@ window.app = new Vue({
     created() {
         Echo.private('chat')
             .listen('MessageSent', (e) => {
+                const message = JSON.parse(e.message);
                 this.messages.push({
-                    message: e.message.message,
-                    created_at: e.message.created_at,
-                    type: e.message.type,
-                    to_uid: e.message.to_uid,
-                    from_uid: e.message.from_uid,
+                    message:message.message,
+                    created_at: message.created_at,
+                    type: message.type,
+                    to_uid: message.to_uid,
+                    from_uid: message.from_uid,
                     user: e.user,
                 });
              });
     },
-    
+
     methods: {
         addMessage(message) {
             if (message.message && message.message.trim().length){
                 var startDate = moment();
 
-                axios.get('/messages').then(response => {  
+                axios.get('/messages').then(response => {
                     var l = response.data.length;
 
                     while (l--) {
@@ -62,9 +70,9 @@ window.app = new Vue({
 
                                 window.app.$children[window.app.$children.length -1].$refs.form.__vue__.newMessage = '';
 
-                                axios.post('/messages', message).then(response => { });
+                                axios.post('/messages', message);
                             }
-                        } else { 
+                        } else {
                             Vue.set(message, 'type', 'post');
                             Vue.set(message, 'created_at', new Date());
 
@@ -74,7 +82,7 @@ window.app = new Vue({
 
                             window.app.$children[window.app.$children.length -1].$refs.form.__vue__.newMessage = '';
 
-                            axios.post('/messages', message).then(response => { console.log(response); });
+                            axios.post('/messages', message);
                         }
                     } else {
                         window.app.$children[window.app.$children.length -1].$refs.form.__vue__.disableInputBool = false;
@@ -95,11 +103,11 @@ window.app = new Vue({
     },
 });
 
-var request = require('sync-request');
+var request =  window.request;
 
 function replaceArray(str, find, replace) {
     var replaceString = str;
-    var regex; 
+    var regex;
     for (var i = 0; i < find.length; i++) {
       regex = new RegExp(find[i], "g");
       replaceString = replaceString.replace(regex, replace[i]);
@@ -117,7 +125,7 @@ function getUserMentions(str){
         var res = request('GET', '/api/v1/users/name/' + matches[1]);
         var res2 = request('GET', '/api/v1/users/roles/' + matches[1]);
         if(res.statusCode == 200 && res2.statusCode == 200){
-            qualities.push('@' + matches[1]); 
+            qualities.push('@' + matches[1]);
             replace.push("@<a href='/users/" + res.getBody('utf8') + "' class='" + res2.getBody('utf8').toLowerCase() + "'>" + res.getBody('utf8') + "</a>");
         }
     }
@@ -147,9 +155,6 @@ function renderAuthor(str){
 
     return str;
 }
-
-var emojione = require('emojione');
-var linkifyHtml = require('linkifyjs/html');
 
 emojione.ascii = true;
 

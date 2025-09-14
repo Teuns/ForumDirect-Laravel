@@ -1,6 +1,6 @@
 @import "_variables";
 
-@import "~@bybas/latte-ui/src/scss/app";
+@import "~@bybas/latte-ui/src/scss/app.scss";
 
 html {
   position: relative;
@@ -118,8 +118,8 @@ aside hr:last-child {
 }
 
 .thead {
-  border-bottom: var(--divider-size) solid var(--outline-color-secondary); 
-  border-top-left-radius: var(--border-radius); 
+  border-bottom: var(--divider-size) solid var(--outline-color-secondary);
+  border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
 
@@ -140,7 +140,7 @@ aside hr:last-child {
 }
 
 .post.buttons {
-  padding-top: 4rem; 
+  padding-top: 4rem;
   padding-bottom: 4rem;
 }
 
@@ -686,7 +686,7 @@ tr:first-child {
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
-.modal-open .modal { 
+.modal-open .modal {
   overflow-x: hidden;
   overflow-y: auto;
 }

@@ -1,7 +1,7 @@
 <?php
 use App\User;
 if(Auth::user()){
-    $query = 
+    $query =
         User::with(['roles' => function($q) {
             $q->where('role_id', '=', Auth::user()->primary_role);
         }])

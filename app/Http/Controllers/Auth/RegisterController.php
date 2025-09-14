@@ -55,7 +55,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'min:3', 'max:255', 'regex:/^\S*$/u', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
         ]);
     }
 
@@ -68,7 +68,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $avatar = new InitialAvatar();
-        $image = $avatar->name($data['name'])->randBackground()->size(128)->generate();
+        $image = $avatar->gd()->name($data['name'])->size(128)->generate();
 
         $role = Role::where('name', '=', 'Guest')->first();
 
@@ -80,8 +80,8 @@ class RegisterController extends Controller
             'primary_role' => $role->id
         ]);
 
-        $user->roles()->attach($role);        
+        $user->roles()->attach($role);
         return $user;
     }
-    
+
 }

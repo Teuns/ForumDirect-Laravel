@@ -37,6 +37,6 @@
                     this.disableInputBool = true;
                 }
             }
-        }    
+        }
     }
 </script>

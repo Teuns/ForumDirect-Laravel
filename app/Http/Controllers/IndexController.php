@@ -2,7 +2,7 @@
 
 /**
  * IndexController
- * 
+ *
  * @category Index
  *
  * @package App\Http\Controllers
@@ -28,7 +28,7 @@ use App\Role;
 
 /**
  * Handles all the Index functionality in the system
- * 
+ *
  * @category Category
  *
  * @package App\Http\Controllers
@@ -43,9 +43,9 @@ class IndexController extends Controller
 {
     /**
      * The index page of the Index
-     * 
+     *
      * @param Request $request request
-     * 
+     *
      * @return view
      */
     public function index(Request $request)
@@ -80,7 +80,7 @@ class IndexController extends Controller
                         $user->save();
                         $user->roles()->detach($member_Role);
                     }
-                }     
+                }
             } elseif ($count_warnings && $user->primary_role == $role->id) {
                 $member_Role = Role::where('name', '=', 'Member')->first();
                 $role = Role::where('name', '=', 'Banned')->first();
@@ -140,9 +140,9 @@ class IndexController extends Controller
 
     /**
      * The getLastPost function
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return string
      */
     static function getLastPost($id)
@@ -166,9 +166,9 @@ class IndexController extends Controller
 
     /**
      * The getLastPostByThread function
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return string
      */
     static function getLastPostByThread($id)
@@ -192,23 +192,23 @@ class IndexController extends Controller
 
     /**
      * The countSubforumPosts function
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return integer
      */
     static function countSubforumPosts($id)
     {
         $count_posts = DB::table('posts')->where('subforum_id', $id)->where('published', 1)->count();
-        
+
         return $count_posts;
     }
 
     /**
      * The countSubforumThreads function
-     * 
+     *
      * @param integer $id id
-     * 
+     *
      * @return integer
      */
     static function countSubforumThreads($id)
@@ -217,12 +217,12 @@ class IndexController extends Controller
 
         return $count_threads;
     }
-    
+
     /**
      * The getUserName function
-     * 
+     *
      * @param integer $userId id
-     * 
+     *
      * @return integer
      */
     static function getUserName($userId)
@@ -232,12 +232,12 @@ class IndexController extends Controller
 
         return $query[0]->name;
     }
-    
+
     /**
      * The getUserRoleName function
-     * 
+     *
      * @param integer $userId id
-     * 
+     *
      * @return string
      */
     static function getUserRoleName($userId)
@@ -254,5 +254,5 @@ class IndexController extends Controller
 
         return $query[0]->roles[0]->name;
     }
-    
+
 }

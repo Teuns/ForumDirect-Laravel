@@ -24,6 +24,6 @@ class SendChatMessage
      */
     public function handle(MessageSent $event)
     {
-        
+        var_dump($event);
     }
 }

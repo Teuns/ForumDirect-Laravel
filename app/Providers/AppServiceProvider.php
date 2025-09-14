@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Listeners\SendChatMessage;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Reverb\Events\MessageReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,8 +26,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if($this->app->environment() === 'production'){ 
+        if ($this->app->environment() === 'production') {
             $this->app['request']->server->set('HTTPS', true);
         }
+
+//        Event::listen(
+//            MessageReceived::class,
+//            SendChatMessage::class
+//        );
     }
 }

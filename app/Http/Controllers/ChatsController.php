@@ -2,7 +2,7 @@
 
 /**
  * ChatsController
- * 
+ *
  * @category Chat
  *
  * @package App\Http\Controllers
@@ -27,7 +27,7 @@ use App\User;
 
 /**
  * Handles all the Chat functionality in the system
- * 
+ *
  * @category Chat
  *
  * @package App\Http\Controllers
@@ -83,7 +83,7 @@ class ChatsController extends Controller
                 'to_uid' => $request->input('to_uid'),
                 'from_uid' => $request->input('from_uid')
             ]);
-        } else { 
+        } else {
             $message = $user->messages()->create([
                 'message' => $request->input('message'),
                 'type' => $request->input('type')

@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const DotenvFlow = require('dotenv-flow-webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,16 +13,18 @@ const mix = require('laravel-mix');
  */
 
  mix.webpackConfig({
+    plugins: [
+         new DotenvFlow({
+             // configuration options
+         })
+     ],
    module: {
      rules: [{
        test: /\.js?$/,
-       use: [{
-         loader: 'babel-loader',
-         options: mix.config.babel()
-       }]
-     }]
+       exclude: /node_modules/,
+     }],
    }
 });
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/app.js', 'public/js').vue({ version: 2 });
+mix.sass('resources/sass/app.scss', 'public/css');

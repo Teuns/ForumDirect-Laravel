@@ -20,7 +20,7 @@ return [
     'final' => [
         'key' => true,
         'publish' => false
-    ],    
+    ],
     'requirements' => [
         'php' => [
             'openssl',
@@ -67,7 +67,7 @@ return [
                 'environment_custom'    => 'required_if:environment,other|max:50',
                 'app_debug'             => [
                     'required',
-                    Rule::in(['true', 'false']),
+                    'in:true,false',
                 ],
                 'app_log_level'         => 'required|string|max:50',
                 'app_url'               => 'required|url',
