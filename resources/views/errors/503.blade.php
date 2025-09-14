@@ -11,7 +11,12 @@
                 503
             </h5>
             Oops! The website is currently in maintance. The given reason for this is:<br>
-            <?php if(json_decode(file_get_contents(storage_path('framework/down')), true)){ $message = json_decode(file_get_contents(storage_path('framework/down')), true)['message']; echo $message; }else{ echo "error"; } ?>
+            <?php if (json_decode(file_get_contents(storage_path('framework/down')), true)) {
+                $message = json_decode(file_get_contents(storage_path('framework/down')), true)['message'];
+                echo $message;
+            } else {
+                echo "error";
+            } ?>
             <br>
             Come back later!
         </div>
