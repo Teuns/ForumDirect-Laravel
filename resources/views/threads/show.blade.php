@@ -272,7 +272,7 @@ blockquote {
   <div class="notice notice-info" role="alert">
     <p>Create an&nbsp;<a href="/register">account</a>&nbsp;or&nbsp;<a href="/login">login</a>&nbsp;to take part in this discussion.</p>
   </div>
-  @endcan @elseif(Auth::user() && strtolower(ThreadController::GetUserRoleName(Auth::id())) == 'administrator' or Auth::user() && strtolower(ThreadController::GetUserRoleName(Auth::id())) == 'moderator')
+  @endcan @elseif(Auth::user() && strtolower(Auth::user()->role->name) == 'administrator' or Auth::user() && strtolower(Auth::user()->role->name) == 'moderator')
   <br>
   <br>
   <a href="/posts/create/{{ $thread->id }}" class="btn btn-primary">
