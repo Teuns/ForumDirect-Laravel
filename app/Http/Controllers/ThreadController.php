@@ -240,7 +240,7 @@ class ThreadController extends Controller
     public function update(Thread $thread, UpdateThreadRequest $request)
     {
         $data = $request->only('title', 'body');
-        $data['slug'] = str_slug($data['title']);
+        $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
         $thread->fill($data)->save();
         return redirect()->route('index')->with('alert', 'Thread successfully updated.');
     }
@@ -288,12 +288,10 @@ class ThreadController extends Controller
                 function ($matches) {
                     $replacement = false;
                     foreach ($matches as $key => $value) {
-                        $users = DB::table('users');
-
-                        $user = $users->where('name', $matches[1])->get();
+                        $user = User::select()->where('name', $matches[1])->get();
 
                         if (!$user->isEmpty()) {
-                            $replacement = '<a href="/users/' . $user[$key]->name . '" class="' . strtolower(self::getUserRoleName($user[$key]->id)) . '">@' . $user[$key]->name . '</a>';
+                            $replacement = '<a href="/users/' . $user[$key]->name . '" class="' . strtolower($user[$key]->role->name) . '">@' . $user[$key]->name . '</a>';
                         } else {
                             $replacement = '@' . $matches[1];
                         }
