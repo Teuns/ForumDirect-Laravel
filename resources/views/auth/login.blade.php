@@ -42,6 +42,10 @@
                             <a class="ml-0 btn btn-soft btn-primary" href="{{ route('password.request') }}">
                                 {{ __('Forgot Your Password?') }}
                             </a> @endif
+                            @if (Route::has('register'))
+                                <a class="ml-0 btn btn-soft btn-primary" href="{{ route('register') }}">
+                                    {{ __("Don't have an account? Make one!") }}
+                                </a> @endif
                         </div>
                     </form>
                 </div>
