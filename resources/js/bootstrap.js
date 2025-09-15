@@ -42,7 +42,7 @@ window.axios.defaults.headers.common = {
 
 window.Echo = new Echo({
     broadcaster: 'reverb',
-    host: "localhost",
+    host: import.meta.env.VITE_REVERB_HOST,
     key: import.meta.env.VITE_REVERB_APP_KEY,
     wsHost: import.meta.env.VITE_REVERB_HOST,
     wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,

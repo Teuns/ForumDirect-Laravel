@@ -22,7 +22,7 @@ window.app = new Vue({
     created () {
         Echo.private('chat')
             .listen('MessageSent', (e) => {
-                const message = JSON.parse(e.message)
+                const message = typeof (e.message) === "string" ? JSON.parse(e.message) : e.message;
                 this.messages.push({
                     message: message.message,
                     created_at: message.created_at,
