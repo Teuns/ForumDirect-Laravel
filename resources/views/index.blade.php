@@ -32,7 +32,7 @@ use App\Http\Controllers\IndexController;
             </div>
             @endif @endif @if(!Auth::user())
                 <div class="notice notice-info" role="alert">
-                    <p>Welcome! If you are new here, why don't you&nbsp;<a href="/register">become a member</a>&nbsp;to our awesome community? If not,&nbsp;<a href="/login">log in</a>&nbsp;instead.</p>
+                    <p>Welcome! If you are new here, why don't you&nbsp;<a href="/register">become a member</a>&nbsp;of our awesome community? If not,&nbsp;<a href="/login">log in</a>&nbsp;instead.</p>
                 </div>
             @endif
 
@@ -50,7 +50,7 @@ use App\Http\Controllers\IndexController;
             <br>
 
             <div class="row">
-                <div class="col-12 col-xl-8">
+                <div class="col-12 col-xl-8 order-first">
                    @if(Auth::user() && Auth::user()->role->name !== 'Banned')
                         {!! $chatbox !!}
                     @endif
@@ -99,7 +99,7 @@ use App\Http\Controllers\IndexController;
                     <aside>
                         <div class="row">
                             <div class="col-12 col-sm-6 col-xl-12">
-                                <div class="panel mb-3 mb-sm-0 mb-xl-3">
+                                <div class="panel mb-3 mb-sm-3">
                                     <div class="panel-body">
                                         <div class="panel-title d-flex"><h4 class="h4 m-0">Recent posts</h4><button data-tooltip="Reload recent posts" class="btn btn-icon btn-text btn-dark ml-auto" id="recentButton"><i class="mdi mdi-refresh mdi-is-medium"></i></button></div>
                                         <div id="recent">
@@ -117,7 +117,7 @@ use App\Http\Controllers\IndexController;
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-xl-12">
-                                <div class="panel mb-3 mb-sm-0 mb-xl-3">
+                                <div class="panel mb-3 mb-sm-3">
                                     <div class="panel-body">
                                         <h2 class="h4 panel-title">Online members</h2>
                                         <div class="list mb-0">
