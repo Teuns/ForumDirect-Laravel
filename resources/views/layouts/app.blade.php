@@ -6,8 +6,7 @@ use App\Http\Controllers\IndexController;
 
 <script type="application/javascript">
     window.Laravel = {!! json_encode([
-        'csrfToken' => csrf_token(),
-        'host' => 'ws://localhost:8080',
+        'csrfToken' => csrf_token()
     ]) !!};
 </script>
 
@@ -16,6 +15,7 @@ use App\Http\Controllers\IndexController;
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('favicon.png') }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -43,7 +43,7 @@ use App\Http\Controllers\IndexController;
 
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
-    <link href="{{ asset('css/app.css?md5='.md5_file('css/app.css')) }}" rel="stylesheet">
+    @vite(['resources/sass/app.scss'])
 
     <link href="{{ asset('css/prism.css') }}" rel="stylesheet">
 
@@ -52,8 +52,8 @@ use App\Http\Controllers\IndexController;
     @vite(['resources/js/app.js'])
 </head>
 <body>
-<main id="app">
-  <div class="app-bar" role="toolbar" v-cloak/>
+<main id="app" v-cloak>
+  <div class="app-bar" role="toolbar">
     <div class="container app-bar-row p-2">
       <button class="btn btn-icon btn-text ml-lg-2 mr-lg-1 d-block d-lg-none" aria-label="Toggle drawer" @click="$refs.drawer.open()"><i class="mdi mdi-menu"></i></button>
 
