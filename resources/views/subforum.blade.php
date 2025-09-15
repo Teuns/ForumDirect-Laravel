@@ -19,7 +19,7 @@ use App\Http\Controllers\IndexController;
         @endif
 
         <div class="row">
-            <div class="col-12 col-xl-8">
+            <div class="col-12 col-xl-8 order-first">
                 <div class="panel">
                 <div class="panel-header"><span class="panel-title">{{ $subforum->name }}</span>
                     @can('create-thread')
@@ -54,7 +54,7 @@ use App\Http\Controllers\IndexController;
                     <aside>
                         <div class="row">
                             <div class="col-12 col-sm-6 col-xl-12">
-                                <div class="panel mb-3 mb-sm-0 mb-xl-3">
+                                <div class="panel mb-3 mb-sm-3">
                                     <div class="panel-body">
                                         <div class="panel-title d-flex"><h4 class="h4 m-0">Recent posts</h4><button data-tooltip="Reload recent posts" class="btn btn-icon btn-text btn-dark ml-auto" id="recentButton"><i class="mdi mdi-refresh mdi-is-medium"></i></button></div>
                                         <div id="recent">
@@ -72,7 +72,7 @@ use App\Http\Controllers\IndexController;
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-xl-12">
-                                <div class="panel mb-3 mb-sm-0 mb-xl-3">
+                                <div class="panel mb-3 mb-sm-3">
                                     <div class="panel-body">
                                         <h2 class="h4 panel-title">Online members</h2>
                                         <div class="list mb-0">
@@ -91,7 +91,7 @@ use App\Http\Controllers\IndexController;
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-xl-12">
-                                <div class="panel mb-3">
+                                <div class="panel">
                                     <div class="panel-body">
                                         <h2 class="h4 panel-title">Forum statistics</h2>
                                         <dl class="row mb-0">

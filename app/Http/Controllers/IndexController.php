@@ -150,7 +150,7 @@ class IndexController extends Controller
     {
         $threads = DB::table('threads');
 
-        $query = $threads->select(['*', 'users.name AS name', 'roles.name AS role_name'])
+        $query = $threads->select(['*', 'users.name AS name', 'roles.name AS role_name', 'threads.id AS id', 'threads.slug AS slug'])
             ->where('subforum_id', $id)
             ->where('published', '=', 1)
             ->orderBy('lastpost_date', 'desc')
@@ -179,7 +179,7 @@ class IndexController extends Controller
     {
         $threads = DB::table('threads');
 
-        $query = $threads->select(['*', 'users.name AS name', 'roles.name AS role_name'])
+        $query = $threads->select(['*', 'threads.id AS id', 'threads.slug AS slug', 'users.name AS name', 'roles.name AS role_name'])
             ->where('threads.id', $id)
             ->where('published', '=', 1)
             ->join('users', 'users.id', '=', 'threads.lastpost_uid')
