@@ -1,7 +1,8 @@
 # ForumDirect
 
-A minimalist and easy to use discussion board system made in Laravel. Uses RBAC to restrict actions and includes many features such as a chat client and the ability to vote on posts.
+A minimalist and easy to use discussion board system made in Laravel. 
 
+Uses RBAC to restrict actions and includes many features such as a chat client and the ability to vote on posts.
 
 ## Set-up instructions
 
