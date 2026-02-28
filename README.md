@@ -20,7 +20,7 @@ Uses RBAC to restrict actions and includes many features such as a chat client a
 * `You may want to change some settings in the .env file`
 * `Run php artisan reverb:start to start the broadcast server`
 
-#### Screenshots
+## Screenshots
 ![](Screenshot_1.png)
 
 ![](Screenshot_2.png)
@@ -29,5 +29,5 @@ Uses RBAC to restrict actions and includes many features such as a chat client a
 
 ![](Screenshot_4.png)
 
-#### License
+## License
 ForumDirect is licensed under the MIT license.
