@@ -1,10 +1,9 @@
 # ForumDirect
 
-After 6 months I finally managed to develop a - in my opinion - solid forum system that only has the basic functionality and can be used in production for everyone. That's why I release the source code now with support.
+A minimalist and easy to use discussion board system made in Laravel. Uses RBAC to restrict actions and includes many features such as a chat client and the ability to vote on posts.
 
-A demo can be accessed at [https://forums.teunstrik.com](https://forums.teunstrik.com). Feel free to test.
 
-## How do I set it up?
+## Set-up instructions
 
 * `Clone the code`
 * `Navigate to the working directory`
@@ -13,13 +12,21 @@ A demo can be accessed at [https://forums.teunstrik.com](https://forums.teunstri
 * `Run php artisan migrate --force`
 * `Run php artisan db:seed`
 
-### And then what?
+## Chat instructions
 
-Then it worked. If you get forbidden errors or something like that, you'll probably have to check if your webserver is set up correctly for Laravel apps.
+* `Run npm install`
+* `Run php artisan install:broadcasting`
+* `You may want to change some settings in the .env file`
+* `Run php artisan reverb:start to start the broadcast server`
 
 #### Screenshots
-![](https://blazor.nl/uploads/get/8c8143e7610024c7/Screenshot-2019-09-11-ForumDirect-Home-1)
-(more to come)
+![](Screenshot_1.png)
+
+![](Screenshot_2.png)
+
+![](Screenshot_3.png)
+
+![](Screenshot_4.png)
 
 #### License
 ForumDirect is licensed under the MIT license.
