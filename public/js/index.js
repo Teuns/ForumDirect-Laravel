@@ -1,12 +1,10 @@
 $(document).ready(function() {
-  var simplemde = new SimpleMDE({ element: document.getElementById("body") });
-
   function init() {
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
         ['blockquote', 'code-block'],
 
-        [{ 'header': 1 }, { 'header': 2 }],  
+        [{ 'header': 1 }, { 'header': 2 }],
         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         [{ 'direction': 'rtl' }],
 
@@ -63,8 +61,8 @@ var auto_refresh_recent = setInterval(function () {
 }, 30000);
 
 $(document).on("click", "#recentButton", function(){
-  $("#recent").load('/api/v1/posts/recent/');  
-}); 
+  $("#recent").load('/api/v1/posts/recent/');
+});
 
 function report() {
 	if(document.getElementById("reason").value && document.getElementById("reason").value.trim().length){
@@ -161,6 +159,6 @@ function checkTheme() {
   } else if(theme == "dark") {
      $("html").attr('data-theme', 'dark');
   }
-} 
+}
 
 checkTheme();

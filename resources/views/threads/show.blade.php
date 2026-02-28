@@ -126,7 +126,7 @@ blockquote {
                                                                                                endif; ?>#pid{{ $row->id }}">{{ $row->created_at }}@if($row->updated_at), updated at: {{ $row->updated_at }}@endif
           </small>
           @if(Auth::user() && $thread->closed)
-            @if(strtolower(Auth::user()->role->name) == 'administrator' || Auth::user() && strtolower(Aut::user()->role->name) == 'moderator')
+            @if(strtolower(Auth::user()->role->name) == 'administrator' || Auth::user() && strtolower(Auth::user()->role->name) == 'moderator')
             <a href="{{ route('edit_post', ['post' => $row->id]) }}" class="float-right btn btn-primary btn-sm ml-2"><i class="fa fa-pencil"></i>
             </a> <a href="/modcp/posts/delete/<?php echo $row->id; ?>" onclick="return confirm('Are you sure?')" class="float-right btn btn-danger btn-sm ml-2"><i class="fa fa-minus-circle"></i>
             </a>

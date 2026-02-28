@@ -1,11 +1,21 @@
+@php use App\ForumDirectParsedown; @endphp
 <style>
-    .CodeMirror {
-        max-height: 350px;
+    #editor-container {
+        height: auto;
+    }
+
+    .ql-editor {
+        min-height: 200px !important;
+        height: auto !important;
+    }
+
+    .ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6 {
+        margin-bottom: 1rem !important;
     }
 </style>
 
-@extends('layouts.app') 
-@section('pageTitle', 'Edit thread') 
+@extends('layouts.app')
+@section('pageTitle', 'Edit thread')
 @section('content')
 
 <section>
@@ -25,10 +35,18 @@
                                  </span> @endif
                     </div>
 
-                    <div class="field{{ $errors->has('body') ? ' has-error' : '' }} form-group">
+                    <div class="field{{ $errors->has('body') ? ' has-error' : '' }} form-group mb-3">
                         <label for="body" class="col-md-4 control-label">Body</label>
 
-                        <textarea name="body" id="body" cols="30" rows="10" class="form-control" required>{{ old('body', $thread->body) }}</textarea>
+                            <?php $parsedown = new ForumDirectParsedown();
+                            $parsedown->setMarkupEscaped(true);
+                            $parsedown->setBreaksEnabled(true);
+                            $text = $parsedown->text($thread->body);
+                        ?>
+
+                        <div id="editor-container">{!! $text  !!}</div>
+                        <textarea id="text-body" name="body" style="display: none;" required></textarea>
+
                         @if ($errors->has('body'))
                         <span class="help-block">
                                     <strong>{{ $errors->first('body') }}</strong>
@@ -42,11 +60,11 @@
                             </button>
                             <a href="/" class="btn btn-soft btn-primary">
                                 Cancel
-                            </a> 
+                            </a>
                             @can('publish-thread')
                                 <a href="{{ route('publish_thread', ['thread' => $thread->id]) }}" class="button is-link">
                                     Publish
-                                </a> 
+                                </a>
                             @endcan
                         </div>
                     </div>

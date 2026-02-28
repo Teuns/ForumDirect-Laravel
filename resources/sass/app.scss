@@ -23,6 +23,14 @@ body
   }
 }
 
+a {
+    text-decoration: none !important;
+}
+
+.post a:not(.guest):not(.administrator):not(.moderator):not(.banned):not(.member):not(.post.buttons a) {
+    text-decoration: underline !important;
+}
+
 div.app-bar
 {
   --ripple-center: true;

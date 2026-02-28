@@ -17,9 +17,9 @@ class CreateDirectMessagesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('body');
-            $table->integer('to_uid');
-            $table->integer('from_uid');
-            $table->integer('user_id');
+            $table->integer('to_uid')->nullable();
+            $table->integer('from_uid')->nullable();
+            $table->integer('user_id')->nullable();
             $table->integer('direct_id');
             $table->timestamps();
         });

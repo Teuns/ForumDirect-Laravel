@@ -5,13 +5,22 @@ use App\Http\Controllers\IndexController;
 ?>
 
 <style>
-    .CodeMirror {
-        max-height: 350px;
+    #editor-container {
+        height: auto;
+    }
+
+    .ql-editor {
+        min-height: 200px !important;
+        height: auto !important;
+    }
+
+    .ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6 {
+        margin-bottom: 1rem !important;
     }
 </style>
 
-@extends('layouts.app') 
-@section('pageTitle', 'Create new thread') 
+@extends('layouts.app')
+@section('pageTitle', 'Create new thread')
 @section('content')
 
 <section>
@@ -39,10 +48,11 @@ use App\Http\Controllers\IndexController;
                         </span> @endif
                     </div>
 
-                    <div class="field{{ $errors->has('body') ? ' has-error' : '' }} form-group">
+                    <div class="field{{ $errors->has('body') ? ' has-error' : '' }} form-group mb-3">
                         <label for="body">Body</label>
 
-                        <textarea class="form-control" name="body" id="body" cols="1" rows="1" class="form-control">{{ old('body') }}</textarea>
+                        <div id="editor-container"></div>
+                        <textarea id="text-body" name="body" style="display: none;" required></textarea>
                         @if ($errors->has('body'))
                         <span class="help-block">
                             <strong>{{ $errors->first('body') }}</strong>
